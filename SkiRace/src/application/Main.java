@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 import java.util.Random;
 
 public class Main extends Application {
-
+// THIS IS A COMMENT WRITTEN IN INTELIJ
 	// Fields
 	TextField nameField;
 	VBox raceDistanceVBox;
