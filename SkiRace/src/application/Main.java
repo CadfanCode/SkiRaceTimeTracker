@@ -134,32 +134,8 @@ public class Main extends Application {
         // Table Columns for Skier
         Table table = new Table();
         
-<<<<<<< HEAD
         resultsTable = table.getTableView();
-=======
-        TableColumn<Skier, Integer> skierIDCol = new TableColumn<>("ID");
-        skierIDCol.setCellValueFactory(new PropertyValueFactory<>("startNumber"));
-        
-        TableColumn<Skier, String> nameCol = new TableColumn<>("Name");
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        TableColumn<Skier, String> finishTimeCol = new TableColumn<>("Finish time");
-        finishTimeCol.setCellValueFactory(new PropertyValueFactory<>("finishTime"));
-        
-        TableColumn<Skier, Integer> raceDistanceCol = new TableColumn<>("Competition Distance");
-        raceDistanceCol.setCellValueFactory(new PropertyValueFactory<>("raceDistance"));
-        
-        TableColumn<Skier, String> startTypeCol = new TableColumn<>("Start Type");
-        startTypeCol.setCellValueFactory(new PropertyValueFactory<>("startType"));
-
-        TableColumn<Skier, Integer> distanceTravelledCol = new TableColumn<>("Distance travelled");
-        distanceTravelledCol.setCellValueFactory(new PropertyValueFactory<>("distance"));
-
-        TableColumn<Skier, LocalTime> middleTimeCol = new TableColumn<>("Middle time");
-        middleTimeCol.setCellValueFactory(new PropertyValueFactory<>("lastMiddleTime"));
-
-        resultsTable.getColumns().addAll(skierIDCol, nameCol, startTypeCol,  raceDistanceCol,  distanceTravelledCol, finishTimeCol, middleTimeCol);
->>>>>>> 2f97b48fd28a83473ef8503da1d786ffbdd11b0b
         resultsTable.setItems(skierList);
 
         VBox centerRegion = new VBox();
