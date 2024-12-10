@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 public class Race {
     private Track track;
     private ObservableList<Skier> skiers;
-    private int milliseconds = 10;
+    private int milliseconds = 100;
     private LocalTime localTime = LocalTime.of(00, 00, 00, 00);
     private int speedSimulator = 1;
 

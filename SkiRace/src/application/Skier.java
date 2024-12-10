@@ -3,6 +3,7 @@ package application;
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.Random;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.shape.Circle;
@@ -13,14 +14,14 @@ public class Skier implements Serializable, Ski {
     private String name;
     private int startNumber;
     private Timer timer = new Timer();
-    private double distance = 0;
-    private double speed = 0;
+    private double speed = 0.0;
     private boolean finished = false;
     private Random random = new Random();
     private String raceType;
     private int raceDistance;
     private SimpleObjectProperty<LocalTime> lastMiddleTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));
     private SimpleStringProperty currentTime = new SimpleStringProperty("00:00:00:000");
+    private SimpleIntegerProperty distance = new SimpleIntegerProperty(0);
 
     public Skier() {}
 
@@ -28,7 +29,6 @@ public class Skier implements Serializable, Ski {
         this.name = name;
         this.startNumber = startNumber;
         this.timer = timer;
-        this.distance = distance;
         this.speed = speed;
         this.finished = finished;
         this.raceType = raceType;
@@ -57,7 +57,7 @@ public class Skier implements Serializable, Ski {
 
     public void distanceTraveled(int milliSeconds) {
         double time = milliSeconds * 0.001;
-        setDistance((getSpeed() * time) + getDistance());
+        setDistance((int)(getSpeed() * time) + getDistance());
     }
 
     @Override
@@ -97,6 +97,11 @@ public class Skier implements Serializable, Ski {
             setCurrentTime("N/A");
         }
     }
+    
+    // This method is needed to return a distance object that is observable for the TableView in Main.
+    public SimpleIntegerProperty distanceProperty() {
+    	return distance;
+    }
 
     // Getters and Setters
     public int getStartNumber() {
@@ -115,12 +120,12 @@ public class Skier implements Serializable, Ski {
         this.timer = timer;
     }
 
-    public double getDistance() {
-        return distance;
+    public int getDistance() {
+        return distance.get();
     }
 
-    public void setDistance(double distance) {
-        this.distance = distance;
+    public void setDistance(int distance) {
+    	this.distance.set(distance); 
     }
 
     public double getSpeed() {
