@@ -83,40 +83,40 @@ public class Main extends Application {
         Button addButton = new Button("Add");
         addButton.setOnMouseClicked(event -> {
             if (!nameField.getText().isEmpty() && k5.isSelected() && massStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "massStart", 5, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Masstart", 5000, skierIDGenerator()));
                 track.setDistance(5000);
             } else if (!nameField.getText().isEmpty() && k10.isSelected() && massStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "massStart", 10, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Masstart", 10000, skierIDGenerator()));
                 track.setDistance(10000);
             } else if (!nameField.getText().isEmpty() && k20.isSelected() && massStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "massStart", 20, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Masstart", 20000, skierIDGenerator()));
                 track.setDistance(20000);
             } else if (!nameField.getText().isEmpty() && k40.isSelected() && massStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "massStart", 40, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Masstart", 40000, skierIDGenerator()));
                 track.setDistance(40000);
             } else if (!nameField.getText().isEmpty() && k5.isSelected() && staggeredStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "staggeredStart", 5, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Stegstart", 5000, skierIDGenerator()));
                 track.setDistance(5000);
             } else if (!nameField.getText().isEmpty() && k10.isSelected() && staggeredStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "staggeredStart", 10, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Stegstart", 10000, skierIDGenerator()));
                 track.setDistance(10000);
             } else if (!nameField.getText().isEmpty() && k20.isSelected() && staggeredStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "staggeredStart", 20, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Stegstart", 20000, skierIDGenerator()));
                 track.setDistance(20000);
             } else if (!nameField.getText().isEmpty() && k40.isSelected() && staggeredStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "staggeredStart", 40, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Stegstart", 40000, skierIDGenerator()));
                 track.setDistance(40000);
             } else if (!nameField.getText().isEmpty() && k5.isSelected() && jaktStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "jaktStart", 5, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Jaktstart", 5000, skierIDGenerator()));
                 track.setDistance(5000);
             } else if (!nameField.getText().isEmpty() && k10.isSelected() && jaktStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "jaktStart", 10, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Jaktstart", 10000, skierIDGenerator()));
                 track.setDistance(10000);
             } else if (!nameField.getText().isEmpty() && k20.isSelected() && jaktStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "jaktStart", 20, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Jaktstart", 20000, skierIDGenerator()));
                 track.setDistance(20000);
             } else if (!nameField.getText().isEmpty() && k40.isSelected() && jaktStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "jaktStart", 40, skierIDGenerator()));
+                skierList.add(new Skier(nameField.getText(), "Jaktstart", 40000, skierIDGenerator()));
                 track.setDistance(40000);
             }
         });
@@ -147,7 +147,13 @@ public class Main extends Application {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         TableColumn<Skier, String> finishTimeCol = new TableColumn<>("Finish time");
-        finishTimeCol.setCellValueFactory(new PropertyValueFactory<>("currentTime"));
+        finishTimeCol.setCellValueFactory(new PropertyValueFactory<>("finishTime"));
+        
+        TableColumn<Skier, Integer> raceDistanceCol = new TableColumn<>("Competition Distance");
+        raceDistanceCol.setCellValueFactory(new PropertyValueFactory<>("raceDistance"));
+        
+        TableColumn<Skier, String> startTypeCol = new TableColumn<>("Start Type");
+        startTypeCol.setCellValueFactory(new PropertyValueFactory<>("startType"));
 
         TableColumn<Skier, Integer> distanceTravelledCol = new TableColumn<>("Distance travelled");
         distanceTravelledCol.setCellValueFactory(new PropertyValueFactory<>("distance"));
@@ -155,7 +161,7 @@ public class Main extends Application {
         TableColumn<Skier, LocalTime> middleTimeCol = new TableColumn<>("Middle time");
         middleTimeCol.setCellValueFactory(new PropertyValueFactory<>("lastMiddleTime"));
 
-        resultsTable.getColumns().addAll(skierIDCol, nameCol, distanceTravelledCol, finishTimeCol, middleTimeCol);
+        resultsTable.getColumns().addAll(skierIDCol, nameCol, startTypeCol,  raceDistanceCol,  distanceTravelledCol, finishTimeCol, middleTimeCol);
         resultsTable.setItems(skierList);
 
         VBox centerRegion = new VBox();
