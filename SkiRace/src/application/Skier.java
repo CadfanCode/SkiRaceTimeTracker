@@ -40,6 +40,11 @@ public class Skier implements Serializable, Ski {
         this.startType = startType;
         this.raceDistance = raceDistance;
     }
+    
+    public Skier(String name, int startNumber) {
+        this.name = name;
+        this.startNumber = startNumber;
+    }
 
     @Override
     public void start() {        

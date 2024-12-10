@@ -52,10 +52,22 @@ public class Main extends Application {
 
         VBox raceDistanceVBox = new VBox();
         Label raceDistanceLabel = new Label("Choose distance:");
+        ArrayList<CheckBox> checkBoxesDistance = new ArrayList<>();
         CheckBox k5 = new CheckBox("5 km");
+        k5.setId("5000");
         CheckBox k10 = new CheckBox("10 km");
+        k10.setId("10000");
         CheckBox k20 = new CheckBox("20 km");
+        k20.setId("20000");
         CheckBox k40 = new CheckBox("40 km");
+        k40.setId("40000");
+        checkBoxesDistance.add(k5);
+        checkBoxesDistance.add(k10);
+        checkBoxesDistance.add(k20);
+        checkBoxesDistance.add(k40);
+        
+        
+        
         raceDistanceVBox.getChildren().addAll(raceDistanceLabel, k5, k10, k20, k40);
         raceDistanceVBox.setPadding(new Insets(20));
         raceDistanceVBox.setMinSize(200, 100);
@@ -79,52 +91,18 @@ public class Main extends Application {
         Track track = new Track(1000, photoCells);
         Race race = new Race(track, skierList); 
         Pane pane = new Pane();
-
-        Button addButton = new Button("Add");
-        addButton.setOnMouseClicked(event -> {
-            if (!nameField.getText().isEmpty() && k5.isSelected() && massStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Masstart", 5000, skierIDGenerator()));
-                track.setDistance(5000);
-            } else if (!nameField.getText().isEmpty() && k10.isSelected() && massStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Masstart", 10000, skierIDGenerator()));
-                track.setDistance(10000);
-            } else if (!nameField.getText().isEmpty() && k20.isSelected() && massStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Masstart", 20000, skierIDGenerator()));
-                track.setDistance(20000);
-            } else if (!nameField.getText().isEmpty() && k40.isSelected() && massStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Masstart", 40000, skierIDGenerator()));
-                track.setDistance(40000);
-            } else if (!nameField.getText().isEmpty() && k5.isSelected() && staggeredStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Stegstart", 5000, skierIDGenerator()));
-                track.setDistance(5000);
-            } else if (!nameField.getText().isEmpty() && k10.isSelected() && staggeredStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Stegstart", 10000, skierIDGenerator()));
-                track.setDistance(10000);
-            } else if (!nameField.getText().isEmpty() && k20.isSelected() && staggeredStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Stegstart", 20000, skierIDGenerator()));
-                track.setDistance(20000);
-            } else if (!nameField.getText().isEmpty() && k40.isSelected() && staggeredStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Stegstart", 40000, skierIDGenerator()));
-                track.setDistance(40000);
-            } else if (!nameField.getText().isEmpty() && k5.isSelected() && jaktStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Jaktstart", 5000, skierIDGenerator()));
-                track.setDistance(5000);
-            } else if (!nameField.getText().isEmpty() && k10.isSelected() && jaktStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Jaktstart", 10000, skierIDGenerator()));
-                track.setDistance(10000);
-            } else if (!nameField.getText().isEmpty() && k20.isSelected() && jaktStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Jaktstart", 20000, skierIDGenerator()));
-                track.setDistance(20000);
-            } else if (!nameField.getText().isEmpty() && k40.isSelected() && jaktStart.isSelected()) {
-                skierList.add(new Skier(nameField.getText(), "Jaktstart", 40000, skierIDGenerator()));
-                track.setDistance(40000);
-            }
+        
+        Button addSkier = new Button("Add skier");
+        addSkier.setOnMouseClicked(event -> {
+        	if (!nameField.getText().isEmpty()) {
+        		skierList.add(new Skier(nameField.getText(), skierIDGenerator()));
+        	}
         });
 
         HBox innerTopBox = new HBox();
         innerTopBox.getChildren().addAll(nameFieldVBox, raceDistanceVBox, startTypeTilePane);
 
-        HBox outerTopBox = new HBox(addButton);
+        HBox outerTopBox = new HBox(addSkier);
         outerTopBox.setAlignment(Pos.BOTTOM_RIGHT);
         outerTopBox.setPadding(new Insets(10));
 
@@ -132,10 +110,8 @@ public class Main extends Application {
         topRegion.setStyle("-fx-background-color: #fafaa7");
 
         // Table Columns for Skier
-        Table table = new Table();
-        
+        Table table = new Table();        
         resultsTable = table.getTableView();
-
         resultsTable.setItems(skierList);
 
         VBox centerRegion = new VBox();
@@ -155,7 +131,13 @@ public class Main extends Application {
 
         startBtn.setOnMouseClicked(event -> {
             if (!raceInProgress) {
-                raceInProgress = true;
+                                
+                for (CheckBox checkbox : checkBoxesDistance) {
+                	if(checkbox.isSelected()) {
+                		race.getTrack().setDistance(Double.parseDouble(checkbox.getId()));
+                	}
+                }
+                
                 race.startRace();
             }
         });
@@ -188,29 +170,6 @@ public class Main extends Application {
         } else {
             return skierList.size() + 1;
         }
-    }
-
-    // Method to update skiers
-    public void updateSkiers(ObservableList<Circle> skiers, Race race) {
-        Thread thread = new Thread(() -> {
-            while (!race.skiersFinished()) {
-                try {
-                    Thread.sleep(10);
-                    for (Circle circle : skiers) {
-                        for (Skier skier : race.getSkiers()) {
-                            if (circle.getId().equals(String.valueOf(skier.getStartNumber()))) {
-                                circle.setTranslateX(skier.getDistance());
-                                skier.updateTime();
-                            }
-                        }
-                    }
-                } catch (InterruptedException ex) {
-                    System.out.println(ex);
-                }
-            }
-        });
-
-        thread.start();
     }
 
     public static void main(String[] args) {
