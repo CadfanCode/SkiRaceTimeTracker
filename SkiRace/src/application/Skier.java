@@ -81,15 +81,6 @@ public class Skier implements Serializable, Ski {
         }
     }
 
-    public Circle skierMarker() {
-        Circle skier = new Circle();
-        skier.setId(String.valueOf(getStartNumber()));
-        skier.setRadius(5);
-        skier.setTranslateX(getDistance());
-        skier.setTranslateY(100);
-        return skier;
-    }
-
     public void updateTime() {
         if (timer.getStartTime() != null && timer.getFinishTime() != null) {
             setFinishTime(timer.TimeBetweenStartAndFinish());

@@ -131,31 +131,10 @@ public class Main extends Application {
         VBox topRegion = new VBox(innerTopBox, outerTopBox);
         topRegion.setStyle("-fx-background-color: #fafaa7");
 
-        // --- Center Region ---
-        ObservableList<Circle> skierNodes = createSkiersNodes(race.getSkiers());
-        for (Circle skierNode : skierNodes) {
-            pane.getChildren().add(skierNode);
-        }
-
         // Table Columns for Skier
-        resultsTable = new TableView<>();
+        Table table = new Table();
         
-        TableColumn<Skier, Integer> skierIDCol = new TableColumn<>("ID");
-        skierIDCol.setCellValueFactory(new PropertyValueFactory<>("startNumber"));
-        
-        TableColumn<Skier, String> nameCol = new TableColumn<>("Name");
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Skier, String> finishTimeCol = new TableColumn<>("Finish time");
-        finishTimeCol.setCellValueFactory(new PropertyValueFactory<>("currentTime"));
-
-        TableColumn<Skier, Integer> distanceTravelledCol = new TableColumn<>("Distance travelled");
-        distanceTravelledCol.setCellValueFactory(new PropertyValueFactory<>("distance"));
-
-        TableColumn<Skier, LocalTime> middleTimeCol = new TableColumn<>("Middle time");
-        middleTimeCol.setCellValueFactory(new PropertyValueFactory<>("lastMiddleTime"));
-
-        resultsTable.getColumns().addAll(skierIDCol, nameCol, distanceTravelledCol, finishTimeCol, middleTimeCol);
+        resultsTable = table.getTableView();
         resultsTable.setItems(skierList);
 
         VBox centerRegion = new VBox();
@@ -177,7 +156,6 @@ public class Main extends Application {
             if (!raceInProgress) {
                 raceInProgress = true;
                 race.startRace();
-                updateSkiers(skierNodes, race);
             }
         });
 
@@ -211,18 +189,6 @@ public class Main extends Application {
         }
     }
 
-    // Method for skier nodes
-    public ObservableList<Circle> createSkiersNodes(ObservableList<Skier> skiers) {
-        ObservableList<Circle> skierNodes = FXCollections.observableArrayList();
-
-        for (Skier skier : skiers) {
-            Circle skierCircle = skier.skierMarker();
-            skierNodes.add(skierCircle);
-        }
-
-        return skierNodes;
-    }
-
     // Method to update skiers
     public void updateSkiers(ObservableList<Circle> skiers, Race race) {
         Thread thread = new Thread(() -> {
@@ -233,10 +199,7 @@ public class Main extends Application {
                         for (Skier skier : race.getSkiers()) {
                             if (circle.getId().equals(String.valueOf(skier.getStartNumber()))) {
                                 circle.setTranslateX(skier.getDistance());
-                                Platform.runLater(() -> {
-                                    skier.updateTime();  // Update current time for each skier
-                                    resultsTable.refresh();  // Refresh the table to reflect changes
-                                });
+                                skier.updateTime();
                             }
                         }
                     }
