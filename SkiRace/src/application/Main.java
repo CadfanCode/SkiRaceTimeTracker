@@ -80,7 +80,6 @@ public class Main extends Application {
         Race race = new Race(track, skierList); 
         Pane pane = new Pane();
 
-
         Button addButton = new Button("Add");
         addButton.setOnMouseClicked(event -> {
             if (!nameField.getText().isEmpty() && k5.isSelected() && massStart.isSelected()) {
@@ -140,7 +139,10 @@ public class Main extends Application {
 
         // Table Columns for Skier
         resultsTable = new TableView<>();
-
+        
+        TableColumn<Skier, Integer> skierIDCol = new TableColumn<>("ID");
+        skierIDCol.setCellValueFactory(new PropertyValueFactory<>("startNumber"));
+        
         TableColumn<Skier, String> nameCol = new TableColumn<>("Name");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -153,7 +155,7 @@ public class Main extends Application {
         TableColumn<Skier, LocalTime> middleTimeCol = new TableColumn<>("Middle time");
         middleTimeCol.setCellValueFactory(new PropertyValueFactory<>("lastMiddleTime"));
 
-        resultsTable.getColumns().addAll(nameCol, distanceTravelledCol, finishTimeCol, middleTimeCol);
+        resultsTable.getColumns().addAll(skierIDCol, nameCol, distanceTravelledCol, finishTimeCol, middleTimeCol);
         resultsTable.setItems(skierList);
 
         VBox centerRegion = new VBox();
