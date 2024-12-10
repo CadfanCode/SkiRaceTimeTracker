@@ -20,7 +20,7 @@ public class Skier implements Serializable, Ski {
     private String raceType;
     private int raceDistance;
     private SimpleObjectProperty<LocalTime> lastMiddleTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));
-    private SimpleStringProperty currentTime = new SimpleStringProperty("00:00:00:000");
+    private SimpleStringProperty finishTime = new SimpleStringProperty("00:00:00:000");
     private SimpleIntegerProperty distance = new SimpleIntegerProperty(0);
 
     public Skier() {}
@@ -92,9 +92,9 @@ public class Skier implements Serializable, Ski {
 
     public void updateTime() {
         if (timer.getStartTime() != null && timer.getFinishTime() != null) {
-            setCurrentTime(timer.TimeBetweenStartAndFinish());
+            setFinishTime(timer.TimeBetweenStartAndFinish());
         } else {
-            setCurrentTime("N/A");
+            setFinishTime("N/A");
         }
     }
     
@@ -180,15 +180,15 @@ public class Skier implements Serializable, Ski {
         return lastMiddleTime;
     }
 
-    public String getCurrentTime() {
-        return currentTime.get();
+    public String getFinishTime() {
+        return finishTime.get();
     }
 
-    public void setCurrentTime(String currentTime) {
-        this.currentTime.set(currentTime);
+    public void setFinishTime(String currentTime) {
+        this.finishTime.set(currentTime);
     }
 
     public SimpleStringProperty currentTimeProperty() {
-        return currentTime;
+        return finishTime;
     }
 }

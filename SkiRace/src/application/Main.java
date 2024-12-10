@@ -69,33 +69,56 @@ public class Main extends Application {
         startTypeTilePane.getChildren().addAll(massStart, staggeredStart, jaktStart);
         startTypeTilePane.setAlignment(Pos.CENTER);
         startTypeTilePane.setMinSize(300, 75);
+        
+        // -- Track set-up
+        ArrayList<Double> photoCells = new ArrayList<>();
+        photoCells.add(250.00);
+        photoCells.add(500.00);
+        photoCells.add(800.00);
+
+        Track track = new Track(1000, photoCells);
+        Race race = new Race(track, skierList); 
+        Pane pane = new Pane();
+
 
         Button addButton = new Button("Add");
         addButton.setOnMouseClicked(event -> {
             if (!nameField.getText().isEmpty() && k5.isSelected() && massStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "massStart", 5, skierIDGenerator()));
+                track.setDistance(5000);
             } else if (!nameField.getText().isEmpty() && k10.isSelected() && massStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "massStart", 10, skierIDGenerator()));
+                track.setDistance(10000);
             } else if (!nameField.getText().isEmpty() && k20.isSelected() && massStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "massStart", 20, skierIDGenerator()));
+                track.setDistance(20000);
             } else if (!nameField.getText().isEmpty() && k40.isSelected() && massStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "massStart", 40, skierIDGenerator()));
+                track.setDistance(40000);
             } else if (!nameField.getText().isEmpty() && k5.isSelected() && staggeredStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "staggeredStart", 5, skierIDGenerator()));
+                track.setDistance(5000);
             } else if (!nameField.getText().isEmpty() && k10.isSelected() && staggeredStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "staggeredStart", 10, skierIDGenerator()));
+                track.setDistance(10000);
             } else if (!nameField.getText().isEmpty() && k20.isSelected() && staggeredStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "staggeredStart", 20, skierIDGenerator()));
+                track.setDistance(20000);
             } else if (!nameField.getText().isEmpty() && k40.isSelected() && staggeredStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "staggeredStart", 40, skierIDGenerator()));
+                track.setDistance(40000);
             } else if (!nameField.getText().isEmpty() && k5.isSelected() && jaktStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "jaktStart", 5, skierIDGenerator()));
+                track.setDistance(5000);
             } else if (!nameField.getText().isEmpty() && k10.isSelected() && jaktStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "jaktStart", 10, skierIDGenerator()));
+                track.setDistance(10000);
             } else if (!nameField.getText().isEmpty() && k20.isSelected() && jaktStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "jaktStart", 20, skierIDGenerator()));
+                track.setDistance(20000);
             } else if (!nameField.getText().isEmpty() && k40.isSelected() && jaktStart.isSelected()) {
                 skierList.add(new Skier(nameField.getText(), "jaktStart", 40, skierIDGenerator()));
+                track.setDistance(40000);
             }
         });
 
@@ -110,15 +133,6 @@ public class Main extends Application {
         topRegion.setStyle("-fx-background-color: #fafaa7");
 
         // --- Center Region ---
-        ArrayList<Double> photoCells = new ArrayList<>();
-        photoCells.add(250.00);
-        photoCells.add(500.00);
-        photoCells.add(800.00);
-
-        Track track = new Track(1000, photoCells);
-        Race race = new Race(track, skierList); 
-        Pane pane = new Pane();
-
         ObservableList<Circle> skierNodes = createSkiersNodes(race.getSkiers());
         for (Circle skierNode : skierNodes) {
             pane.getChildren().add(skierNode);
@@ -130,8 +144,8 @@ public class Main extends Application {
         TableColumn<Skier, String> nameCol = new TableColumn<>("Name");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        TableColumn<Skier, String> currentTimeCol = new TableColumn<>("Current time");
-        currentTimeCol.setCellValueFactory(new PropertyValueFactory<>("currentTime"));
+        TableColumn<Skier, String> finishTimeCol = new TableColumn<>("Finish time");
+        finishTimeCol.setCellValueFactory(new PropertyValueFactory<>("currentTime"));
 
         TableColumn<Skier, Integer> distanceTravelledCol = new TableColumn<>("Distance travelled");
         distanceTravelledCol.setCellValueFactory(new PropertyValueFactory<>("distance"));
@@ -139,7 +153,7 @@ public class Main extends Application {
         TableColumn<Skier, LocalTime> middleTimeCol = new TableColumn<>("Middle time");
         middleTimeCol.setCellValueFactory(new PropertyValueFactory<>("lastMiddleTime"));
 
-        resultsTable.getColumns().addAll(nameCol, distanceTravelledCol, currentTimeCol, middleTimeCol);
+        resultsTable.getColumns().addAll(nameCol, distanceTravelledCol, finishTimeCol, middleTimeCol);
         resultsTable.setItems(skierList);
 
         VBox centerRegion = new VBox();
