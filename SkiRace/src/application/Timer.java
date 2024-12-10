@@ -7,7 +7,8 @@ import java.util.ArrayList;
 public class Timer {
     private LocalTime startTime;
     private LocalTime finishTime;
-    private ArrayList<LocalTime> middleTimes = new ArrayList<>(); 
+    private ArrayList<LocalTime> middleTimes = new ArrayList<>();
+    private String formattedTime;
 
     public Timer() {}
 
@@ -20,17 +21,16 @@ public class Timer {
         if (startTime != null && finishTime != null) {
             Duration duration = Duration.between(startTime, finishTime);
             long millis = duration.toMillis();
-
             long hours = millis / 3_600_000;
             millis %= 3_600_000;
             long minutes = millis / 60_000;
             millis %= 60_000;
             long seconds = millis / 1_000;
             millis %= 1_000;
-
-            return String.format("%02d:%02d:%02d:%02d", hours, minutes, seconds, millis);
+            formattedTime = String.format("%02d:%02d:%02d:%03d", hours, minutes, seconds, millis);
+            return formattedTime;
         } else {
-            return "N/A";  // Return a default value if start or finish time is not set
+            return "N/A";
         }
     }
 
@@ -56,5 +56,15 @@ public class Timer {
 
     public void setMiddleTimes(ArrayList<LocalTime> middleTimes) {
         this.middleTimes = middleTimes;
+    }
+    
+    // Getter for formattedTime
+    public String getFormattedTime() {
+        return formattedTime;
+    }
+
+    // Setter for formattedTime
+    public void setFormattedTime(String formattedTime) {
+        this.formattedTime = formattedTime;
     }
 }

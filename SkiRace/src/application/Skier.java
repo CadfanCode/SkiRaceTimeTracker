@@ -3,6 +3,8 @@ package application;
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.Random;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.shape.Circle;
 
 public class Skier implements Serializable, Ski {
@@ -14,12 +16,12 @@ public class Skier implements Serializable, Ski {
     private double distance = 0;
     private double speed = 0;
     private boolean finished = false;
-    private Random random = new Random(); 
-    private String raceType; // Added to store raceType
-    private int raceDistance; // Add to store raceDistance
-    private LocalTime lastMiddleTime; // This is needed for use in the TableView.
-    private String currentTime; // This is used to store the current time as a string for TableView.
-    
+    private Random random = new Random();
+    private String raceType;
+    private int raceDistance;
+    private SimpleObjectProperty<LocalTime> lastMiddleTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));
+    private SimpleStringProperty currentTime = new SimpleStringProperty("00:00:00:000");
+
     public Skier() {}
 
     public Skier(String name, String raceType, int startNumber, Timer timer, double distance, double speed, boolean finished) {
@@ -30,7 +32,6 @@ public class Skier implements Serializable, Ski {
         this.speed = speed;
         this.finished = finished;
         this.raceType = raceType;
-        this.lastMiddleTime = LocalTime.of(0, 0, 0);
     }
 
     public Skier(String name, String raceType, int raceDistance, int startNumber) {
@@ -91,10 +92,9 @@ public class Skier implements Serializable, Ski {
 
     public void updateTime() {
         if (timer.getStartTime() != null && timer.getFinishTime() != null) {
-            String time = timer.TimeBetweenStartAndFinish();  // Get the formatted time string
-            setCurrentTime(time);  // Set the new current time
+            setCurrentTime(timer.TimeBetweenStartAndFinish());
         } else {
-            setCurrentTime("N/A");  // Handle when the time isn't available
+            setCurrentTime("N/A");
         }
     }
 
@@ -164,18 +164,26 @@ public class Skier implements Serializable, Ski {
     }
 
     public LocalTime getLastMiddleTime() {
+        return lastMiddleTime.get();
+    }
+
+    public void setLastMiddleTime(LocalTime lastMiddleTime) {
+        this.lastMiddleTime.set(lastMiddleTime);
+    }
+
+    public SimpleObjectProperty<LocalTime> lastMiddleTimeProperty() {
         return lastMiddleTime;
     }
 
-    public void setLastMiddleTime(LocalTime middleTime) {
-        this.lastMiddleTime = middleTime;
-    }
-
     public String getCurrentTime() {
-        return currentTime;
+        return currentTime.get();
     }
 
     public void setCurrentTime(String currentTime) {
-        this.currentTime = currentTime;
+        this.currentTime.set(currentTime);
+    }
+
+    public SimpleStringProperty currentTimeProperty() {
+        return currentTime;
     }
 }

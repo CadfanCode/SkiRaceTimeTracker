@@ -2,11 +2,11 @@ package application;
 
 public class UtilitySki {
 
-	public static void interval(int milliSeconds) {
-		try {
-			Thread.sleep(milliSeconds);			
-		} catch(InterruptedException ex) {
-			System.out.println("Something went wrong with sleeping thread: " + ex.getMessage());
-		}
+	public static void interval(int speedSimulator) {
+	    try {
+	        Thread.sleep(10 / speedSimulator); // Non-blocking interval
+	    } catch (InterruptedException e) {
+	        e.printStackTrace();
+	    }
 	}
 }
