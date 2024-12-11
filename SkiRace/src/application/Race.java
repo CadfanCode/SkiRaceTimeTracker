@@ -82,7 +82,7 @@ public class Race {
         if (!skier.isFinished()) {
             skier.accelerateOrDecelerate();
             skier.distanceTraveled(getMilliseconds());
-            checkMiddleTime(skier);
+            checkCheckPointTime(skier);
             skierCrossedLine(skier);
         }
     }
@@ -107,22 +107,24 @@ public class Race {
         localTime = localTime.plusNanos(milliseconds * 1000000);
     }
 
-    public void checkMiddleTime(Skier skier) {
-        int missingMiddleTimes = track.getPhotoCells().size() - skier.getTimer().getMiddleTimes().size();
-        if (missingMiddleTimes == 0) return;
+    public void checkCheckPointTime(Skier skier) {
+        int missingCheckPointTimes = track.getPhotoCells().size() - skier.getTimer().getCheckPointTimes().size();
+        if (missingCheckPointTimes == 0) return;
 
-        for (int i = 0; i < track.getPhotoCells().size(); i++) {
-            if (i == skier.getTimer().getMiddleTimes().size()) {
-                addMiddleTimeToSkier(skier, track.getPhotoCells().get(i));
-                break;
+        for (int i = skier.getTimer().getCheckPointTimes().size(); i < track.getPhotoCells().size(); i++) {
+            if (skier.getDistance() >= track.getPhotoCells().get(i)) {
+                addCheckPointTimeToSkier(skier, track.getPhotoCells().get(i));
+            } else {
+                break; 
             }
         }
     }
 
-    public void addMiddleTimeToSkier(Skier skier, double distance) {
-        if (skier.getDistance() >= distance) {
-            skier.getTimer().getMiddleTimes().add(localTime);
-            skier.setLastMiddleTime(skier.getTimer().getMiddleTimes().getLast());
+
+    public void addCheckPointTimeToSkier(Skier skier, double distance) {
+        if (skier.getDistance() >= distance ) {
+            skier.getTimer().getCheckPointTimes().add(localTime);
+            skier.setLastCheckPointTime(skier.getTimer().getCheckPointTimes().getLast());
         }
     }
 }

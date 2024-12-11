@@ -12,15 +12,15 @@ public class Table {
 	TableColumn nameCol = new TableColumn("Name");
 	TableColumn finishTimeCol = new TableColumn("Finish time");
 	TableColumn distanceTravelledCol = new TableColumn("Distance travelled");
-	TableColumn middleTimeCol = new TableColumn("Middle time");
+	TableColumn CheckPointTimeCol = new TableColumn("Checkpoint time");
 	
 	public Table() {
         skierIDCol.setCellValueFactory(new PropertyValueFactory<>("startNumber"));        
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         finishTimeCol.setCellValueFactory(new PropertyValueFactory<>("finishTime"));
         distanceTravelledCol.setCellValueFactory(new PropertyValueFactory<>("distance"));
-        middleTimeCol.setCellValueFactory(new PropertyValueFactory<>("lastMiddleTime"));
-        getTableView().getColumns().addAll(skierIDCol, nameCol, distanceTravelledCol, finishTimeCol, middleTimeCol);
+        CheckPointTimeCol.setCellValueFactory(new PropertyValueFactory<>("lastCheckPointTime"));
+        getTableView().getColumns().addAll(skierIDCol, nameCol, distanceTravelledCol, finishTimeCol, CheckPointTimeCol);
 	}
 	
 	public TableView getTableView() {
@@ -63,12 +63,12 @@ public class Table {
 		this.distanceTravelledCol = distanceTravelledCol;
 	}
 
-	public TableColumn getMiddleTimeCol() {
-		return middleTimeCol;
+	public TableColumn getCheckPointTimeCol() {
+		return CheckPointTimeCol;
 	}
 
-	public void setMiddleTimeCol(TableColumn middleTimeCol) {
-		this.middleTimeCol = middleTimeCol;
+	public void setCheckPointTimeCol(TableColumn CheckPointTimeCol) {
+		this.CheckPointTimeCol = CheckPointTimeCol;
 	}
 
 

@@ -19,7 +19,7 @@ public class Skier implements Serializable, Ski {
     private Random random = new Random();
     private String startType;
     private int raceDistance;
-    private SimpleObjectProperty<LocalTime> lastMiddleTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));
+    private SimpleObjectProperty<LocalTime> lastCheckPointTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));
     private SimpleStringProperty finishTime = new SimpleStringProperty("00:00:00:000");
     private SimpleIntegerProperty distance = new SimpleIntegerProperty(0);
 
@@ -164,16 +164,16 @@ public class Skier implements Serializable, Ski {
         this.name = name;
     }
 
-    public LocalTime getLastMiddleTime() {
-        return lastMiddleTime.get();
+    public LocalTime getLastCheckPointTime() {
+        return lastCheckPointTime.get();
     }
 
-    public void setLastMiddleTime(LocalTime lastMiddleTime) {
-        this.lastMiddleTime.set(lastMiddleTime);
+    public void setLastCheckPointTime(LocalTime lastCheckPointTime) {
+        this.lastCheckPointTime.set(lastCheckPointTime);
     }
 
-    public SimpleObjectProperty<LocalTime> lastMiddleTimeProperty() {
-        return lastMiddleTime;
+    public SimpleObjectProperty<LocalTime> lastCheckPointTimeProperty() {
+        return lastCheckPointTime;
     }
 
     public String getFinishTime() {

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Timer {
     private LocalTime startTime;
     private LocalTime finishTime;
-    private ArrayList<LocalTime> middleTimes = new ArrayList<>();
+    private ArrayList<LocalTime> CheckPointTimes = new ArrayList<>();
     private String formattedTime;
 
     public Timer() {}
@@ -50,12 +50,12 @@ public class Timer {
         this.finishTime = finishTime;
     }
 
-    public ArrayList<LocalTime> getMiddleTimes() {
-        return middleTimes;
+    public ArrayList<LocalTime> getCheckPointTimes() {
+        return CheckPointTimes;
     }
 
-    public void setMiddleTimes(ArrayList<LocalTime> middleTimes) {
-        this.middleTimes = middleTimes;
+    public void setCheckPointTimes(ArrayList<LocalTime> CheckPointTimes) {
+        this.CheckPointTimes = CheckPointTimes;
     }
     
     // Getter for formattedTime
