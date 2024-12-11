@@ -9,9 +9,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.shape.Circle;
 
-public class Skier implements Serializable, Ski {
+public class Skier implements Ski {
 
-    private static final long serialVersionUID = 1L;
     private String name;
     private int startNumber;
     private Timer timer = new Timer();

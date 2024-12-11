@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +40,7 @@ public class Main extends Application {
 
 		// Initialize the list of athletes
 		skierList = FXCollections.observableArrayList();
-
+		
 		// --- Top Region ---
 		VBox nameFieldVBox = new VBox();
 		Label nameFieldLabel = new Label("Enter Athlete's Name");
@@ -71,8 +72,6 @@ public class Main extends Application {
         checkBoxesDistance.add(k20);
         checkBoxesDistance.add(k40);
 		 */
-
-
 
 		raceDistanceVBox.getChildren().addAll(raceDistanceLabel, k10); // k5, k20, k40 Removed.
 		raceDistanceVBox.setPadding(new Insets(20));
@@ -154,13 +153,11 @@ public class Main extends Application {
 
 		startBtn.setOnMouseClicked(event -> {
 			if (!raceInProgress) {
-
 				for (CheckBox checkbox : checkBoxesDistance) {
 					if(checkbox.isSelected()) {
 						race.getTrack().setDistance(Double.parseDouble(checkbox.getId()));
 					}
 				}
-
 				race.startRace();
 			}
 		});

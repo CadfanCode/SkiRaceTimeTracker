@@ -1,7 +1,10 @@
 package application;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
+
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -9,7 +12,7 @@ import javafx.collections.ObservableList;
 public class Race {
     private Track track;
     private ObservableList<Skier> skiers;
-    private int milliseconds = 100;
+    private int milliseconds = 1000;
     private LocalTime localTime = LocalTime.of(00, 00, 00, 00);
     private int speedSimulator = 1;
     Skier leader; 
@@ -79,6 +82,8 @@ public class Race {
                 Platform.runLater(() -> skier.updateTime());
             }
         }
+ 
+        serializeSkiers();
     }
 
     private void skierAction(Skier skier) {
@@ -94,6 +99,7 @@ public class Race {
         if (skier.getDistance() >= track.getDistance()) {
             skier.setFinished(true);
             skier.getTimer().setFinishTime(getLocalTime());
+            skier.updateTime();
         }
     }
 
@@ -145,5 +151,31 @@ public class Race {
     	}
     }
     
+    public void serializeSkiers() {
+		try {
+			Serialize serialize = new Serialize();
+			ArrayList<SerializableSkier> serializableSkiers = new ArrayList<>();
+			
+			for (Skier skier : getSkiers()) {
+				SerializableSkier serializeSkier = new SerializableSkier();
+				serializeSkier.setName(skier.getName());
+				serializeSkier.setStartNumber(skier.getStartNumber());
+				serializeSkier.setSpeed(skier.getSpeed());
+				serializeSkier.setFinished(skier.isFinished());
+				serializeSkier.setStartType(skier.getStartType());
+				serializeSkier.setRaceDistance(skier.getRaceDistance());
+				serializeSkier.setLastCheckPointTime(skier.getLastCheckPointTime().toString());
+				serializeSkier.setTimeFromLeader(skier.getTimeFromLeader().toString());
+				serializeSkier.setFinishTime(skier.getFinishTime().toString());
+				serializeSkier.setDistance(skier.getDistance());
+				serializableSkiers.add(serializeSkier);
+			}
+			
+			serialize.encoder(serializableSkiers);
+			serialize.getXmlEncoder().close();
+		} catch(IOException ex) {
+			System.out.println("Something went wrong with serialization" + ex.getMessage());
+		}
+    }
     
 }
