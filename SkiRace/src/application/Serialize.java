@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Serialize {
 
@@ -20,14 +19,7 @@ public class Serialize {
 	private FileInputStream fileInputStream; 
 	private String fileName = "Skiers.xml";
 	
-	public Serialize() throws FileNotFoundException {
-		this.fileOutStream = new FileOutputStream(fileName);
-		this.fileInputStream = new FileInputStream(fileName);
-		this.outStream = new BufferedOutputStream(fileOutStream); 
-		this.inputStream = new BufferedInputStream(fileInputStream);
-		this.xmlEncoder = new XMLEncoder(outStream);
-		this.xmlDecoder = new XMLDecoder(inputStream);
-	}	
+	public Serialize() {}	
 	
 	public Serialize(XMLEncoder xmlEncoder, XMLDecoder xmlDecoder) {
 		super();
@@ -52,20 +44,36 @@ public class Serialize {
 	}
 	
 
-	public void encoder (ArrayList<SerializableSkier> skiers) {
-		for (SerializableSkier skier : skiers) {
-			getXmlEncoder().writeObject(skier);			
-		}
+	public void encodeObject(ArrayList<SerializableSkier> skiers) throws FileNotFoundException {
+	    try (FileOutputStream fos = new FileOutputStream(fileName);
+	         BufferedOutputStream bos = new BufferedOutputStream(fos);
+	         XMLEncoder encoder = new XMLEncoder(bos)) {
+	        
+	    	for (SerializableSkier skier : skiers) {
+	    		encoder.writeObject(skier);	    		
+	    	}
+	    	
+	    } catch (Exception e) {
+	        System.err.println("Error during encoding: " + e.getMessage());
+	    }
 	}
 	
-	public ArrayList<SerializableSkier> decoder () {
+	public ArrayList<SerializableSkier> decodeObject(int size) {
+		ArrayList<SerializableSkier> skiers = new ArrayList<>();
 		
-		ArrayList<SerializableSkier> arraylist = new ArrayList<>();
-		SerializableSkier skier = (SerializableSkier) getXmlDecoder().readObject();
-		System.out.println(skier);
-
-		return null;
-	}
-	
+	    try (FileInputStream fis = new FileInputStream(fileName);
+	         BufferedInputStream bis = new BufferedInputStream(fis);
+	         XMLDecoder decoder = new XMLDecoder(bis)) {
+	    	
+	    	for (int i = 0; i < size; i++) {
+	    		skiers.add((SerializableSkier) decoder.readObject());	    		
+	    	}
+	    		        
+	    } catch (Exception e) {
+	        System.err.println("Error during decoding: " + e.getMessage());
+	    }
+	    
+	    return skiers;
+	}	
 	
 }

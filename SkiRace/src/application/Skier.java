@@ -1,13 +1,11 @@
 package application;
 
-import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Random;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.shape.Circle;
 
 public class Skier implements Ski {
 

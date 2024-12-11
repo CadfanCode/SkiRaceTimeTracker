@@ -6,13 +6,12 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 
 public class Race {
     private Track track;
     private ObservableList<Skier> skiers;
-    private int milliseconds = 1000;
+    private int milliseconds = 5000;
     private LocalTime localTime = LocalTime.of(00, 00, 00, 00);
     private int speedSimulator = 1;
     Skier leader; 
@@ -83,7 +82,7 @@ public class Race {
             }
         }
  
-//        serializeSkiers();
+        serializeSkiers();
         deseralizer();
     }
 
@@ -155,7 +154,7 @@ public class Race {
     public void serializeSkiers() {
 		try {
 			Serialize serialize = new Serialize();
-			ArrayList<SerializableSkier> serializableSkiers = new ArrayList<>();
+			ArrayList<SerializableSkier> skiers = new ArrayList<>();
 			
 			for (Skier skier : getSkiers()) {
 				SerializableSkier serializeSkier = new SerializableSkier();
@@ -169,11 +168,10 @@ public class Race {
 				serializeSkier.setTimeFromLeader(skier.getTimeFromLeader().toString());
 				serializeSkier.setFinishTime(skier.getFinishTime().toString());
 				serializeSkier.setDistance(skier.getDistance());
-				serializableSkiers.add(serializeSkier);
+				skiers.add(serializeSkier);
 			}
 			
-			serialize.encoder(serializableSkiers);
-			serialize.getXmlEncoder().close();
+			serialize.encodeObject(skiers);
 		} catch(IOException ex) {
 			System.out.println("Something went wrong with serialization" + ex.getMessage());
 		}
@@ -182,13 +180,14 @@ public class Race {
     public void deseralizer () {
     	
     	try {
+    		ArrayList<SerializableSkier> skiers;
+
     		Serialize serialize = new Serialize();
-			serialize.decoder();
+			skiers = serialize.decodeObject(getSkiers().size());
+			System.out.println("tja");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-    	
-    	
     }
     
     
