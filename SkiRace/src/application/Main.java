@@ -53,6 +53,11 @@ public class Main extends Application {
         VBox raceDistanceVBox = new VBox();
         Label raceDistanceLabel = new Label("Choose distance:");
         ArrayList<CheckBox> checkBoxesDistance = new ArrayList<>();
+        CheckBox k10 = new CheckBox("10 km");
+        k10.setId("10000");
+        k10.setSelected(true);
+        checkBoxesDistance.add(k10);
+        /*
         CheckBox k5 = new CheckBox("5 km");
         k5.setId("5000");
         CheckBox k10 = new CheckBox("10 km");
@@ -62,13 +67,13 @@ public class Main extends Application {
         CheckBox k40 = new CheckBox("40 km");
         k40.setId("40000");
         checkBoxesDistance.add(k5);
-        checkBoxesDistance.add(k10);
         checkBoxesDistance.add(k20);
         checkBoxesDistance.add(k40);
+        */
         
         
         
-        raceDistanceVBox.getChildren().addAll(raceDistanceLabel, k5, k10, k20, k40);
+        raceDistanceVBox.getChildren().addAll(raceDistanceLabel, k10); // k5, k20, k40 Removed.
         raceDistanceVBox.setPadding(new Insets(20));
         raceDistanceVBox.setMinSize(200, 100);
         raceDistanceVBox.setAlignment(Pos.CENTER);
@@ -82,7 +87,7 @@ public class Main extends Application {
         startTypeTilePane.setAlignment(Pos.CENTER);
         startTypeTilePane.setMinSize(300, 75);
         
-        // -- Track set-up
+        // -- Track set-up --
         ArrayList<Double> photoCells = new ArrayList<>();
         photoCells.add(250.00);
         photoCells.add(500.00);
@@ -92,13 +97,23 @@ public class Main extends Application {
         Race race = new Race(track, skierList); 
         Pane pane = new Pane();
         
+        // -- Add button function -- 
         Button addSkier = new Button("Add skier");
         addSkier.setOnMouseClicked(event -> {
         	if (!nameField.getText().isEmpty()) {
-        		skierList.add(new Skier(nameField.getText(), skierIDGenerator()));
+        		if (jaktStart.isSelected()) {
+        		skierList.add(new Skier(nameField.getText(),"jaktStart", 10000, skierIDGenerator()));
+        		}
+        		if (massStart.isSelected()) {
+        			skierList.add(new Skier(nameField.getText(), "massStart", 10000, skierIDGenerator()));
+        		}
+        		if (staggeredStart.isSelected()) {
+        			skierList.add(new Skier(nameField.getText(), "staggeredStart", 10000, skierIDGenerator()));
+        		}
         	}
         });
 
+        // -- Region settings --
         HBox innerTopBox = new HBox();
         innerTopBox.getChildren().addAll(nameFieldVBox, raceDistanceVBox, startTypeTilePane);
 

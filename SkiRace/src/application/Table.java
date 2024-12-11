@@ -17,7 +17,7 @@ public class Table {
 	public Table() {
         skierIDCol.setCellValueFactory(new PropertyValueFactory<>("startNumber"));        
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        finishTimeCol.setCellValueFactory(new PropertyValueFactory<>("currentTime"));
+        finishTimeCol.setCellValueFactory(new PropertyValueFactory<>("finishTime"));
         distanceTravelledCol.setCellValueFactory(new PropertyValueFactory<>("distance"));
         middleTimeCol.setCellValueFactory(new PropertyValueFactory<>("lastMiddleTime"));
         getTableView().getColumns().addAll(skierIDCol, nameCol, distanceTravelledCol, finishTimeCol, middleTimeCol);
