@@ -1,7 +1,9 @@
 package application;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 
 public class Race {
@@ -10,6 +12,7 @@ public class Race {
     private int milliseconds = 100;
     private LocalTime localTime = LocalTime.of(00, 00, 00, 00);
     private int speedSimulator = 1;
+    Skier leader; 
 
     public Race(Track track, ObservableList<Skier> skiers) {
         this.track = track;
@@ -114,6 +117,11 @@ public class Race {
         for (int i = skier.getTimer().getCheckPointTimes().size(); i < track.getPhotoCells().size(); i++) {
             if (skier.getDistance() >= track.getPhotoCells().get(i)) {
                 addCheckPointTimeToSkier(skier, track.getPhotoCells().get(i));
+                leader = Main.skierList.get(0);
+                FindLeader();
+                // Calculate the duration between the leader and the skier
+                Duration timeDifference = Duration.between(leader.getLastCheckPointTime(), skier.getLastCheckPointTime());
+                skier.setTimeFromLeader(timeDifference);
             } else {
                 break; 
             }
@@ -127,4 +135,15 @@ public class Race {
             skier.setLastCheckPointTime(skier.getTimer().getCheckPointTimes().getLast());
         }
     }
+    
+    // -- Find Leader --
+    public void FindLeader() {
+    	for (Skier skier : Main.skierList) {
+    		if (skier.getDistance() > leader.getDistance()) {
+    			leader = skier;
+    		}
+    	}
+    }
+    
+    
 }

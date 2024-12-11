@@ -1,6 +1,7 @@
 package application;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Random;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -20,10 +21,11 @@ public class Skier implements Serializable, Ski {
     private String startType;
     private int raceDistance;
     private SimpleObjectProperty<LocalTime> lastCheckPointTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));
+    private SimpleObjectProperty<Duration> timeFromLeader = new SimpleObjectProperty<>();
     private SimpleStringProperty finishTime = new SimpleStringProperty("00:00:00:000");
     private SimpleIntegerProperty distance = new SimpleIntegerProperty(0);
 
-    public Skier() {}
+	public Skier() {}
 
     public Skier(String name, String startType, int startNumber, Timer timer, double distance, double speed, boolean finished) {
         this.name = name;
@@ -186,5 +188,13 @@ public class Skier implements Serializable, Ski {
 
     public SimpleStringProperty currentTimeProperty() {
         return finishTime;
+    }
+    
+    public SimpleObjectProperty<Duration> getTimeFromLeader() {
+		return timeFromLeader;
+	}
+
+    public void setTimeFromLeader(Duration timeDifference) {
+        this.timeFromLeader.set(timeDifference);
     }
 }
