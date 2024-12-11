@@ -13,10 +13,6 @@ public class Serialize {
 
 	private XMLEncoder xmlEncoder;
 	private XMLDecoder xmlDecoder;
-	private BufferedOutputStream outStream;
-	private BufferedInputStream inputStream;
-	private FileOutputStream fileOutStream;
-	private FileInputStream fileInputStream; 
 	private String fileName = "Skiers.xml";
 	
 	public Serialize() {}	

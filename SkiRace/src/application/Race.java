@@ -184,7 +184,6 @@ public class Race {
 
     		Serialize serialize = new Serialize();
 			skiers = serialize.decodeObject(getSkiers().size());
-			System.out.println("tja");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
