@@ -83,7 +83,8 @@ public class Race {
             }
         }
  
-        serializeSkiers();
+//        serializeSkiers();
+        deseralizer();
     }
 
     private void skierAction(Skier skier) {
@@ -177,5 +178,22 @@ public class Race {
 			System.out.println("Something went wrong with serialization" + ex.getMessage());
 		}
     }
+    
+    public void deseralizer () {
+    	
+    	try {
+    		Serialize serialize = new Serialize();
+			serialize.decoder();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+    	
+    	
+    }
+    
+    
+    
+    
+    
     
 }
