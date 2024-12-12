@@ -62,7 +62,7 @@ public class Serialize {
 	         XMLDecoder decoder = new XMLDecoder(bis)) {
 	    	
 	    	for (int i = 0; i < size; i++) {
-	    		skiers.add((SerializableSkier) decoder.readObject());	    		
+	    		skiers.add((SerializableSkier) decoder.readObject());	
 	    	}
 	    		        
 	    } catch (Exception e) {
