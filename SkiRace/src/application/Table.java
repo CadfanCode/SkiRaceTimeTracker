@@ -47,7 +47,7 @@ public class Table {
                 };
             }
         });
-
+        
         getTableView().getColumns().addAll(skierIDCol, nameCol, distanceTravelledCol, finishTimeCol, checkPointTimeCol, timeFromLeaderCol);
     }
 

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="21.0.5" class="java.beans.XMLDecoder">
+ <object class="application.SerializableSkier">
+  <void property="distance">
+   <int>10023</int>
+  </void>
+  <void property="finishTime">
+   <string>00:02:19:596</string>
+  </void>
+  <void property="finished">
+   <boolean>true</boolean>
+  </void>
+  <void property="lastCheckPointTime">
+   <string>00:02:19.596475392</string>
+  </void>
+  <void property="name">
+   <string>dfgfdg</string>
+  </void>
+  <void property="raceDistance">
+   <int>10000</int>
+  </void>
+  <void property="speed">
+   <double>30.0</double>
+  </void>
+  <void property="startNumber">
+   <int>1</int>
+  </void>
+  <void property="startType">
+   <string>massStart</string>
+  </void>
+  <void property="timeFromLeader">
+   <string>ObjectProperty [value: PT0S]</string>
+  </void>
+ </object>
+ <object class="application.SerializableSkier">
+  <void property="distance">
+   <int>10006</int>
+  </void>
+  <void property="finishTime">
+   <string>00:02:42:862</string>
+  </void>
+  <void property="finished">
+   <boolean>true</boolean>
+  </void>
+  <void property="lastCheckPointTime">
+   <string>00:02:42.862554624</string>
+  </void>
+  <void property="name">
+   <string>dfgfdg</string>
+  </void>
+  <void property="raceDistance">
+   <int>10000</int>
+  </void>
+  <void property="speed">
+   <double>19.71418627796123</double>
+  </void>
+  <void property="startNumber">
+   <int>2</int>
+  </void>
+  <void property="startType">
+   <string>massStart</string>
+  </void>
+  <void property="timeFromLeader">
+   <string>ObjectProperty [value: PT23.266079232S]</string>
+  </void>
+ </object>
+</java>

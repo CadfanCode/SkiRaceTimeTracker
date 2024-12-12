@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="22.0.2" class="java.beans.XMLDecoder">
+ <object class="application.SerializableSkier">
+  <void property="distance">
+   <int>150</int>
+  </void>
+  <void property="finishTime">
+   <string>00:20:20</string>
+  </void>
+  <void property="finished">
+   <boolean>true</boolean>
+  </void>
+  <void property="lastCheckPointTime">
+   <string>00:10:10</string>
+  </void>
+  <void property="name">
+   <string>Test</string>
+  </void>
+  <void property="raceDistance">
+   <int>1000</int>
+  </void>
+  <void property="speed">
+   <double>15.5</double>
+  </void>
+  <void property="startNumber">
+   <int>1</int>
+  </void>
+  <void property="startType">
+   <string>Type A</string>
+  </void>
+  <void property="timeFromLeader">
+   <string>00:00:05</string>
+  </void>
+ </object>
+</java>

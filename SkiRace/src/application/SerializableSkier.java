@@ -1,6 +1,12 @@
 package application;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 
 public class SerializableSkier implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -91,6 +97,7 @@ public class SerializableSkier implements Serializable {
 	public void setDistance(int distance) {
 		this.distance = distance;
 	}
-    
-    
 }
+    
+    
+

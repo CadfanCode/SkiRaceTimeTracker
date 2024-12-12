@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="21.0.5" class="java.beans.XMLDecoder">
+ <object class="application.SerializableSkier">
+  <void property="distance">
+   <int>10029</int>
+  </void>
+  <void property="finishTime">
+   <string>00:02:48:502</string>
+  </void>
+  <void property="finished">
+   <boolean>true</boolean>
+  </void>
+  <void property="lastCheckPointTime">
+   <string>00:02:48.502816256</string>
+  </void>
+  <void property="name">
+   <string>fgfdgdf</string>
+  </void>
+  <void property="raceDistance">
+   <int>10000</int>
+  </void>
+  <void property="speed">
+   <double>16.233635366262607</double>
+  </void>
+  <void property="startNumber">
+   <int>1</int>
+  </void>
+  <void property="startType">
+   <string>massStart</string>
+  </void>
+  <void property="timeFromLeader">
+   <string>ObjectProperty [value: PT55.697583616S]</string>
+  </void>
+ </object>
+ <object class="application.SerializableSkier">
+  <void property="distance">
+   <int>10065</int>
+  </void>
+  <void property="finishTime">
+   <string>00:02:59:783</string>
+  </void>
+  <void property="finished">
+   <boolean>true</boolean>
+  </void>
+  <void property="lastCheckPointTime">
+   <string>00:02:59.783339520</string>
+  </void>
+  <void property="name">
+   <string>fgfdgdf</string>
+  </void>
+  <void property="raceDistance">
+   <int>10000</int>
+  </void>
+  <void property="speed">
+   <double>21.782415276427397</double>
+  </void>
+  <void property="startNumber">
+   <int>2</int>
+  </void>
+  <void property="startType">
+   <string>massStart</string>
+  </void>
+  <void property="timeFromLeader">
+   <string>ObjectProperty [value: PT0S]</string>
+  </void>
+ </object>
+ <object class="application.SerializableSkier">
+  <void property="distance">
+   <int>10058</int>
+  </void>
+  <void property="finishTime">
+   <string>00:01:52:805</string>
+  </void>
+  <void property="finished">
+   <boolean>true</boolean>
+  </void>
+  <void property="lastCheckPointTime">
+   <string>00:01:52.805232640</string>
+  </void>
+  <void property="name">
+   <string>fgfdgdf</string>
+  </void>
+  <void property="raceDistance">
+   <int>10000</int>
+  </void>
+  <void property="speed">
+   <double>17.39285444068267</double>
+  </void>
+  <void property="startNumber">
+   <int>3</int>
+  </void>
+  <void property="startType">
+   <string>massStart</string>
+  </void>
+  <void property="timeFromLeader">
+   <string>ObjectProperty [value: PT0S]</string>
+  </void>
+ </object>
+</java>
