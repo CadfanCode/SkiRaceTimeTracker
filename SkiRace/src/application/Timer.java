@@ -5,19 +5,19 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Timer {
-    private LocalTime startTime;
-    private LocalTime finishTime;
-    private ArrayList<LocalTime> CheckPointTimes = new ArrayList<>();
-    private String formattedTime;
+	private LocalTime startTime;
+	private LocalTime finishTime;
+	private ArrayList<LocalTime> CheckPointTimes = new ArrayList<>();
+	private String formattedTime;
 
-    public Timer() {}
+	public Timer() {}
 
-    public Timer(LocalTime startTime, LocalTime finishTime) {
-        this.startTime = startTime;
-        this.finishTime = finishTime;
-    }
+	public Timer(LocalTime startTime, LocalTime finishTime) {
+		this.startTime = startTime;
+		this.finishTime = finishTime;
+	}
 
-    public String TimeBetweenStartAndFinish() {
+	/*  public LocalTime TimeBetweenStartAndFinish() {
         if (startTime != null && finishTime != null) {
             Duration duration = Duration.between(startTime, finishTime);
             long millis = duration.toMillis();
@@ -27,44 +27,56 @@ public class Timer {
             millis %= 60_000;
             long seconds = millis / 1_000;
             millis %= 1_000;
-            formattedTime = String.format("%02d:%02d:%02d:%03d", hours, minutes, seconds, millis);
+            //formattedTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
             return formattedTime;
         } else {
             return "N/A";
         }
     }
+	 */
+	public LocalTime TimeBetweenStartAndFinish() {
+		if (startTime != null && finishTime != null) {
+			Duration duration = Duration.between(startTime, finishTime);
+			long hours = duration.toHours();
+			long minutes = duration.toMinutes() % 60;
+			long seconds = duration.getSeconds() % 60;
 
-    public LocalTime getStartTime() {
-        return startTime;
-    }
+			return LocalTime.of((int) hours, (int) minutes, (int) seconds);
+		} else {
+			return null; 
+		}
+	}
+	public LocalTime getStartTime() {
+		return startTime;
+	}
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
+	public void setStartTime(LocalTime startTime) {
+		this.startTime = startTime;
+	}
 
-    public LocalTime getFinishTime() {
-        return finishTime;
-    }
+	public LocalTime getFinishTime() {
+		return finishTime;
+	}
 
-    public void setFinishTime(LocalTime finishTime) {
-        this.finishTime = finishTime;
-    }
+	public void setFinishTime(LocalTime finishTime) {
+		this.finishTime = finishTime;
+	}
 
-    public ArrayList<LocalTime> getCheckPointTimes() {
-        return CheckPointTimes;
-    }
+	public ArrayList<LocalTime> getCheckPointTimes() {
+		return CheckPointTimes;
+	}
 
-    public void setCheckPointTimes(ArrayList<LocalTime> CheckPointTimes) {
-        this.CheckPointTimes = CheckPointTimes;
-    }
-    
-    // Getter for formattedTime
-    public String getFormattedTime() {
-        return formattedTime;
-    }
+	public void setCheckPointTimes(ArrayList<LocalTime> CheckPointTimes) {
+		this.CheckPointTimes = CheckPointTimes;
+	}
 
-    // Setter for formattedTime
-    public void setFormattedTime(String formattedTime) {
-        this.formattedTime = formattedTime;
-    }
+	// Getter for formattedTime
+	public String getFormattedTime() {
+		return formattedTime;
+	}
+
+	// Setter for formattedTime
+	public void setFormattedTime(String formattedTime) {
+		this.formattedTime = formattedTime;
+	}
 }

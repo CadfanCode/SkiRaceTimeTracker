@@ -32,7 +32,8 @@ public class Main extends Application {
 	Button startBtn;
 	Button stopBtn;
 	boolean raceInProgress;
-	TableView<Skier> resultsTable;
+	static TableView<Skier> resultsTable;
+	TableView<Skier> seededResultsTable;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -135,9 +136,25 @@ public class Main extends Application {
 		Table table = new Table();        
 		resultsTable = table.getTableView();
 		resultsTable.setItems(skierList);
-
-		VBox centerRegion = new VBox();
-		centerRegion.getChildren().addAll(pane, resultsTable);
+		
+		// -- New code 13/12/2024 -- 
+		// Table to show results from the seeding Race.
+		Table seededTable = new Table();
+		seededResultsTable = seededTable.getTableView();
+		seededResultsTable.setItems(Race.raceSeedingList);
+		Pane pane2 = new Pane();
+		VBox leftRegion = new VBox();
+		VBox rightRegion = new VBox();
+		rightRegion.getChildren().addAll(pane2, seededTable.getTableView());
+		leftRegion.getChildren().addAll(pane, resultsTable);
+		
+		// Combine leftRegion and rightRegion into centerRegion
+		HBox centerRegion = new HBox();
+		centerRegion.getChildren().addAll(leftRegion, rightRegion);
+		centerRegion.setSpacing(20); // Add spacing between left and right regions
+		centerRegion.setPadding(new Insets(10));
+		centerRegion.setAlignment(Pos.CENTER);
+		// -- 
 
 		// --- Bottom Region ---
 		HBox bottomRegion = new HBox();

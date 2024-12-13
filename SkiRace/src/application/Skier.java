@@ -17,9 +17,10 @@ public class Skier implements Ski {
     private Random random = new Random();
     private String startType;
     private int raceDistance;
+    private LocalTime deserializedFinishTime;
     private SimpleObjectProperty<LocalTime> lastCheckPointTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));
     private SimpleObjectProperty<Duration> timeFromLeader = new SimpleObjectProperty<>();
-    private SimpleStringProperty finishTime = new SimpleStringProperty("00:00:00:000");
+    private SimpleObjectProperty<LocalTime> finishTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));;
     private SimpleIntegerProperty distance = new SimpleIntegerProperty(0);
 
 	public Skier() {}
@@ -34,18 +35,19 @@ public class Skier implements Ski {
     }
 
     public Skier(String name, String startType, int raceDistance, int startNumber) {
-        this.name = name;
+        this.name = name; 
         this.startNumber = startNumber;
         this.startType = startType;
         this.raceDistance = raceDistance;
     }
     
-    public Skier(String name, int startNumber) {
+    public Skier(String name, int startNumber, LocalTime derserializedFinishTime) {
         this.name = name;
         this.startNumber = startNumber;
+        this.deserializedFinishTime = deserializedFinishTime;
     }
 
-    @Override
+	@Override
     public void start() {        
         for (int i = 0; i < 5; i++) {
             accelerate();
@@ -89,7 +91,7 @@ public class Skier implements Ski {
         if (timer.getStartTime() != null && timer.getFinishTime() != null) {
             setFinishTime(timer.TimeBetweenStartAndFinish());
         } else {
-            setFinishTime("N/A");
+            setFinishTime(null);
         }
     }
     
@@ -175,18 +177,14 @@ public class Skier implements Ski {
         return lastCheckPointTime;
     }
 
-    public String getFinishTime() {
+    public LocalTime getFinishTime() {
         return finishTime.get();
     }
 
-    public void setFinishTime(String currentTime) {
-        this.finishTime.set(currentTime);
+    public void setFinishTime(LocalTime finishTime) {
+        this.finishTime.set(finishTime);
     }
 
-    public SimpleStringProperty currentTimeProperty() {
-        return finishTime;
-    }
-    
     public SimpleObjectProperty<Duration> getTimeFromLeader() {
 		return timeFromLeader;
 	}
@@ -194,4 +192,11 @@ public class Skier implements Ski {
     public void setTimeFromLeader(Duration timeDifference) {
         this.timeFromLeader.set(timeDifference);
     }
+    public LocalTime getDeserializedFinishTime() {
+  		return deserializedFinishTime;
+  	}
+
+  	public void setDeserializedFinishTime(LocalTime deserializedFinishTime) {
+  		this.deserializedFinishTime = deserializedFinishTime;
+  	}
 }

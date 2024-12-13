@@ -7,13 +7,14 @@ import javafx.scene.control.TableCell;
 import javafx.util.Callback;
 
 import java.time.Duration;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Table {
     TableView<Skier> tableView = new TableView<>();
     TableColumn<Skier, Integer> skierIDCol = new TableColumn<>("ID");
     TableColumn<Skier, String> nameCol = new TableColumn<>("Name");
-    TableColumn<Skier, String> finishTimeCol = new TableColumn<>("Finish time");
+    TableColumn<Skier, LocalTime> finishTimeCol = new TableColumn<>("Finish time");
     TableColumn<Skier, Integer> distanceTravelledCol = new TableColumn<>("Distance travelled");
     TableColumn<Skier, String> checkPointTimeCol = new TableColumn<>("Checkpoint time");
     TableColumn<Skier, Duration> timeFromLeaderCol = new TableColumn<>("Time from leader");
@@ -75,11 +76,11 @@ public class Table {
         this.nameCol = nameCol;
     }
 
-    public TableColumn<Skier, String> getFinishTimeCol() {
+    public TableColumn<Skier,LocalTime> getFinishTimeCol() {
         return finishTimeCol;
     }
 
-    public void setFinishTimeCol(TableColumn<Skier, String> finishTimeCol) {
+    public void setFinishTimeCol(TableColumn<Skier, LocalTime> finishTimeCol) {
         this.finishTimeCol = finishTimeCol;
     }
 

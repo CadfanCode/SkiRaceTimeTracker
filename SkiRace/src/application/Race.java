@@ -5,9 +5,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Race {
@@ -17,6 +20,7 @@ public class Race {
     private LocalTime localTime = LocalTime.of(00, 00, 00, 00);
     private int speedSimulator = 1;
     Skier leader; 
+    static ObservableList<Skier> raceSeedingList = FXCollections.observableArrayList();
 
     public Race(Track track, ObservableList<Skier> skiers) {
         this.track = track;
@@ -83,11 +87,46 @@ public class Race {
                 Platform.runLater(() -> skier.updateTime());
             }
         }
+        // -- New code 13/12/2024
         serializeSkiers(Main.skierList);
-        deseralizer();
+        ArrayList<SerializableSkier> deserializedSkiers = deseralizer(); // Deserializer method called. Returns an ArrayList of SerializableSkier objects from the .xml file and stores them in an ArrayList called "deserializedSkiers".
+        bubbleSortSeededSkierList(conversionForTableView(deserializedSkiers));
     }
+     // --
+     
+     // -- New code 13/12/2025 --
+     // This method will convert the ArrayList from deserialization into an ObservableList that can be displayed in TableView.
+    private ObservableList<Skier> conversionForTableView(ArrayList<SerializableSkier>  deserializedSkiers) {
+		for (SerializableSkier skier : deserializedSkiers) {
+			Skier seededSkier = new Skier();
+			seededSkier.setName(skier.getName());
+			seededSkier.setStartNumber(skier.getStartNumber());
+			seededSkier.setDeserializedFinishTime(LocalTime.parse(skier.getFinishTime())); // Susceptible to fail if finishTime String contains a formatting error??
+			raceSeedingList.add(seededSkier);		
+			}
+		return raceSeedingList;
+	}
+    // -- 
+    
+    // -- New code 13/12/2025 --
+    // This method will bubble-sort the list according to finishing times.
+    private void bubbleSortSeededSkierList(ObservableList<Skier> raceSeedingList) {
+        for (int i = 0; i < raceSeedingList.size() - 1; i++) { 
+            for (int j = 0; j < raceSeedingList.size() - i - 1; j++) { 
+                if (raceSeedingList.get(j).getDeserializedFinishTime().isAfter(raceSeedingList.get(j + 1).getDeserializedFinishTime())) {
+                    Skier temp = raceSeedingList.get(j);
+                    raceSeedingList.set(j, raceSeedingList.get(j + 1));
+                    raceSeedingList.set(j + 1, temp);
+                }
+            }
+        }
+        for (int i = 0; i < raceSeedingList.size(); i++) { // This will run after the list has been sorted and will assign the skiers a new sorting number.
+        	raceSeedingList.get(i).setStartNumber(i+1);
+        }
+    }
+    // --
 
-    private void skierAction(Skier skier) {
+	private void skierAction(Skier skier) {
         if (!skier.isFinished()) {
             skier.accelerateOrDecelerate();
             skier.distanceTraveled(getMilliseconds());
@@ -101,6 +140,7 @@ public class Race {
             skier.setFinished(true);
             skier.getTimer().setFinishTime(getLocalTime());
             skier.updateTime();
+            Main.resultsTable.refresh();
         }
     }
 
@@ -134,7 +174,17 @@ public class Race {
             }
         }
     }
-
+    
+    // -- New Code 13/12/2024 --
+    // A helper method to reformat a duration variable (stored within a SimpleObjetProperty wrapper) to a string in a readable format. -- 
+    public String formatDuration(SimpleObjectProperty<Duration> simpleObjectProperty) {
+    	Duration duration = simpleObjectProperty.get(); // This 'extracts' the Duration value from it's simpleObjectProperty wrapper.
+    	long hours = duration.toHours();
+    	long minutes = duration.toMinutes();
+    	long seconds = duration.toSeconds();
+    	return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+    // --
 
     public void addCheckPointTimeToSkier(Skier skier, double distance) {
         if (skier.getDistance() >= distance ) {
@@ -160,6 +210,7 @@ public class Race {
             // Populate the skiers list with SerializableSkier objects
             for (Skier skier : skierList) {
                 SerializableSkier serializeSkier = new SerializableSkier();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Ensures correct formatting of finish time.
                 serializeSkier.setName(skier.getName());
                 serializeSkier.setStartNumber(skier.getStartNumber());
                 serializeSkier.setSpeed(skier.getSpeed());
@@ -167,7 +218,7 @@ public class Race {
                 serializeSkier.setStartType(skier.getStartType());
                 serializeSkier.setRaceDistance(skier.getRaceDistance());
                 serializeSkier.setLastCheckPointTime(skier.getLastCheckPointTime().toString());
-                serializeSkier.setTimeFromLeader(skier.getTimeFromLeader().toString());
+                serializeSkier.setTimeFromLeader(formatDuration(skier.getTimeFromLeader()));
                 serializeSkier.setFinishTime(skier.getFinishTime().toString());
                 serializeSkier.setDistance(skier.getDistance());
             
@@ -179,16 +230,17 @@ public class Race {
         }
     }
 
-    public void deseralizer () {
+    public ArrayList<SerializableSkier> deseralizer() {
     	
     	try {
     		ArrayList<SerializableSkier> skiers;
-
     		Serialize serialize = new Serialize();
 			skiers = serialize.decodeObject(getSkiers().size());
+			return skiers;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		return null;
     }
     
     
