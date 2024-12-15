@@ -73,7 +73,6 @@ public class Main extends Application {
         checkBoxesDistance.add(k20);
         checkBoxesDistance.add(k40);
 		 */
-
 		raceDistanceVBox.getChildren().addAll(raceDistanceLabel, k10); // k5, k20, k40 Removed.
 		raceDistanceVBox.setPadding(new Insets(20));
 		raceDistanceVBox.setMinSize(200, 100);
@@ -87,6 +86,31 @@ public class Main extends Application {
 		startTypeTilePane.getChildren().addAll(massStart, staggeredStart, jaktStart);
 		startTypeTilePane.setAlignment(Pos.CENTER);
 		startTypeTilePane.setMinSize(300, 75);
+	
+		// -- Search Field --
+		HBox searchBox = new HBox();
+		Label searchBoxLabel = new Label("Sök enligt StartID:");
+		Label searchResultLabel = new Label();
+		TextField searchField = new TextField();
+		searchField.setMinWidth(100);
+		Button searchButton = new Button("Sök");
+		searchButton.setOnMouseClicked(event -> {
+			String searchResult = search(searchField.getText()); // Perform the search
+			if (!searchResult.isEmpty()) {
+				searchResultLabel.setText(searchResult);
+			}
+			else {
+				// Optionally, show an alert if no booking is found
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setTitle("No Results");
+				alert.setHeaderText(null);
+				alert.setContentText("Ingen bokning hittades för det angivna bokningsnumret.");
+				alert.showAndWait();
+			}
+		});
+		searchBox.getChildren().addAll(searchBoxLabel, searchField, searchButton, searchResultLabel);
+		
+		
 
 		// -- Track set-up --
 		ArrayList<Double> photoCells = new ArrayList<>();
@@ -129,7 +153,7 @@ public class Main extends Application {
 		outerTopBox.setAlignment(Pos.BOTTOM_RIGHT);
 		outerTopBox.setPadding(new Insets(10));
 
-		VBox topRegion = new VBox(innerTopBox, outerTopBox);
+		VBox topRegion = new VBox(innerTopBox, outerTopBox, searchBox);
 		topRegion.setStyle("-fx-background-color: #fafaa7");
 
 		// Table Columns for Skier
@@ -218,7 +242,53 @@ public class Main extends Application {
 		}
 		return true;
 	}
+	
+	// -- New code 15/12/2024 --
+	// Search function to be used for search button in GUI.
+	private String search(String input) {
+		int searchNum;
+		try { searchNum = Integer.parseInt(input);
+		for (Skier skier : skierList) {
+			ObservableList<Skier> tempList = skierList;
+			if (skier.getStartNumber()==searchNum) {
+				bubbleSort(tempList);
+				for (int i = 0; i < tempList.size(); i++) {
+					if (tempList.get(i).getName().equals(skier.getName())) {
+						if (i == 0 || i == 1)
+						return ("Deltagare med startnummer \"" + searchNum + "\" placerade i " + (i+1) + ":a plats."  );
+						else {
+						return ("Deltagare med startnummer \"" + searchNum + "\" placerade i " + (i+1) + ":e plats."  );
+						}
+					}
+				}
+				return "Ingen deltagare hittades.";
+			}
+		}
+		}  catch (NumberFormatException e) { // Catch the error if the users input cannot be parsed into an integer.
+			e.printStackTrace();
+		}
+		return null;
+	}
+	// --
+	// -- New code 15/12/2024 --
+	// This is just recycled code from the race class. The only difference in this method is that it getsFinishTime() instead of getsDeserializedFinishTime().
+	// This is due to how deserializedFinishTime is stored as an ObservableSimpleProperty.
+	  static void bubbleSort(ObservableList<Skier> resultsList) {
+	        for (int i = 0; i < resultsList.size() - 1; i++) { 
+	            for (int j = 0; j < resultsList.size() - i - 1; j++) { 
+	                if (resultsList.get(j).getFinishTime().isAfter(resultsList.get(j + 1).getFinishTime())) {
+	                    Skier temp = resultsList.get(j);
+	                    resultsList.set(j, resultsList.get(j + 1));
+	                    resultsList.set(j + 1, temp);
+	                }
+	            }
+	        }
+	        for (int i = 0; i < resultsList.size(); i++) { // This will run after the list has been sorted and will assign the skiers a new sorting number.
+	        	resultsList.get(i).setStartNumber(i+1);
+	        }
+	    }
 
+	 // --
 	public static void main(String[] args) {
 		launch(args);
 	}

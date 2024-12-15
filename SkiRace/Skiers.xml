@@ -2,25 +2,25 @@
 <java version="21.0.5" class="java.beans.XMLDecoder">
  <object class="application.SerializableSkier">
   <void property="distance">
-   <int>10105</int>
+   <int>10090</int>
   </void>
   <void property="finishTime">
-   <string>00:02:17</string>
+   <string>00:01:38</string>
   </void>
   <void property="finished">
    <boolean>true</boolean>
   </void>
   <void property="lastCheckPointTime">
-   <string>00:02:17.481377280</string>
+   <string>00:01:38.704578560</string>
   </void>
   <void property="name">
-   <string>Bob</string>
+   <string>sdfds</string>
   </void>
   <void property="raceDistance">
    <int>10000</int>
   </void>
   <void property="speed">
-   <double>26.812536682925366</double>
+   <double>19.930577349864876</double>
   </void>
   <void property="startNumber">
    <int>1</int>
@@ -34,98 +34,66 @@
  </object>
  <object class="application.SerializableSkier">
   <void property="distance">
-   <int>10000</int>
+   <int>10072</int>
   </void>
   <void property="finishTime">
-   <string>00:02:24</string>
+   <string>00:01:21</string>
   </void>
   <void property="finished">
    <boolean>true</boolean>
   </void>
   <void property="lastCheckPointTime">
-   <string>00:02:24.531704320</string>
+   <string>00:01:21.783793664</string>
   </void>
   <void property="name">
-   <string>Bill</string>
+   <string>sdfds</string>
   </void>
   <void property="raceDistance">
    <int>10000</int>
   </void>
   <void property="speed">
-   <double>16.122421871970708</double>
+   <double>21.45584155713203</double>
   </void>
   <void property="startNumber">
    <int>2</int>
   </void>
   <void property="startType">
-   <string>massStart</string>
+   <string>staggeredStart</string>
   </void>
   <void property="timeFromLeader">
-   <string>00:00:07</string>
+   <string>00:00:00</string>
   </void>
  </object>
  <object class="application.SerializableSkier">
   <void property="distance">
-   <int>10068</int>
+   <int>10045</int>
   </void>
   <void property="finishTime">
-   <string>00:01:25</string>
+   <string>00:01:36</string>
   </void>
   <void property="finished">
    <boolean>true</boolean>
   </void>
   <void property="lastCheckPointTime">
-   <string>00:01:25.308957184</string>
+   <string>00:01:36.589480448</string>
   </void>
   <void property="name">
-   <string>Sven</string>
+   <string>sdfds</string>
   </void>
   <void property="raceDistance">
    <int>10000</int>
   </void>
   <void property="speed">
-   <double>23.113120038986057</double>
+   <double>20.108689464348018</double>
   </void>
   <void property="startNumber">
    <int>3</int>
   </void>
   <void property="startType">
-   <string>massStart</string>
+   <string>jaktStart</string>
   </void>
   <void property="timeFromLeader">
-   <string>00:00:00</string>
-  </void>
- </object>
- <object class="application.SerializableSkier">
-  <void property="distance">
-   <int>10091</int>
-  </void>
-  <void property="finishTime">
-   <string>00:02:15</string>
-  </void>
-  <void property="finished">
-   <boolean>true</boolean>
-  </void>
-  <void property="lastCheckPointTime">
-   <string>00:02:15.366279168</string>
-  </void>
-  <void property="name">
-   <string>Olof</string>
-  </void>
-  <void property="raceDistance">
-   <int>10000</int>
-  </void>
-  <void property="speed">
-   <double>20.92253212923367</double>
-  </void>
-  <void property="startNumber">
-   <int>4</int>
-  </void>
-  <void property="startType">
-   <string>massStart</string>
-  </void>
-  <void property="timeFromLeader">
-   <string>00:00:00</string>
+   <string>00:00:14</string>
   </void>
  </object>
 </java>
