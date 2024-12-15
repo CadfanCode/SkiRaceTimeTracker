@@ -20,7 +20,8 @@ public class Skier implements Ski {
     private LocalTime deserializedFinishTime;
     private SimpleObjectProperty<LocalTime> lastCheckPointTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));
     private SimpleObjectProperty<Duration> timeFromLeader = new SimpleObjectProperty<>();
-    private SimpleObjectProperty<LocalTime> finishTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));;
+    private SimpleObjectProperty<LocalTime> finishTime = new SimpleObjectProperty<>(LocalTime.of(0, 0, 0));
+    private SimpleObjectProperty<LocalTime> startTime = new SimpleObjectProperty<>();
     private SimpleIntegerProperty distance = new SimpleIntegerProperty(0);
 
 	public Skier() {}
@@ -44,7 +45,6 @@ public class Skier implements Ski {
     public Skier(String name, int startNumber, LocalTime derserializedFinishTime) {
         this.name = name;
         this.startNumber = startNumber;
-        this.deserializedFinishTime = deserializedFinishTime;
     }
 
 	@Override
@@ -93,6 +93,13 @@ public class Skier implements Ski {
         } else {
             setFinishTime(null);
         }
+    }
+    
+    public void updateTableView() {
+    	for (Skier skier: Main.skierList) {
+    		skier.getStartTime();
+    	}
+    	Main.resultsTable.refresh();
     }
     
     // This method is needed to return a distance object that is observable for the TableView in Main.
@@ -199,4 +206,15 @@ public class Skier implements Ski {
   	public void setDeserializedFinishTime(LocalTime deserializedFinishTime) {
   		this.deserializedFinishTime = deserializedFinishTime;
   	}
+
+	public LocalTime getStartTime() {
+		return getTimer().getStartTime();
+	}
+
+	public void setStartTime(LocalTime startTime) {
+		this.getTimer().setStartTime(startTime);
+	}
+	public SimpleObjectProperty<LocalTime> startTimeProperty() {
+	    return new SimpleObjectProperty<>(this.getTimer().getStartTime());
+	}
 }

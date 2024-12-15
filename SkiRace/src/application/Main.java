@@ -2,6 +2,7 @@ package application;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -16,6 +17,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,10 +43,10 @@ public class Main extends Application {
 
 		// Initialize the list of athletes
 		skierList = FXCollections.observableArrayList();
-		
+
 		// --- Top Region ---
 		VBox nameFieldVBox = new VBox();
-		Label nameFieldLabel = new Label("Enter Athlete's Name");
+		Label nameFieldLabel = new Label("Ange deltagarens namn:");
 		nameField = new TextField();
 		nameField.setMinWidth(200);
 		nameFieldVBox.getChildren().addAll(nameFieldLabel, nameField);
@@ -54,7 +56,7 @@ public class Main extends Application {
 		nameFieldVBox.setSpacing(20);
 
 		VBox raceDistanceVBox = new VBox();
-		Label raceDistanceLabel = new Label("Choose distance:");
+		Label raceDistanceLabel = new Label("Välj distans:");
 		ArrayList<CheckBox> checkBoxesDistance = new ArrayList<>();
 		CheckBox k10 = new CheckBox("10 km");
 		k10.setId("10000");
@@ -80,13 +82,13 @@ public class Main extends Application {
 		raceDistanceVBox.setSpacing(1);
 
 		TilePane startTypeTilePane = new TilePane();
-		CheckBox massStart = new CheckBox("Mass Start");
-		CheckBox staggeredStart = new CheckBox("Staggered Start");
+		CheckBox massStart = new CheckBox("Masstart");
+		CheckBox individuellStart = new CheckBox("Individuell start");
 		CheckBox jaktStart = new CheckBox("Jaktstart");
-		startTypeTilePane.getChildren().addAll(massStart, staggeredStart, jaktStart);
+		startTypeTilePane.getChildren().addAll(massStart, individuellStart, jaktStart);
 		startTypeTilePane.setAlignment(Pos.CENTER);
 		startTypeTilePane.setMinSize(300, 75);
-	
+
 		// -- Search Field --
 		HBox searchBox = new HBox();
 		Label searchBoxLabel = new Label("Sök enligt StartID:");
@@ -109,8 +111,8 @@ public class Main extends Application {
 			}
 		});
 		searchBox.getChildren().addAll(searchBoxLabel, searchField, searchButton, searchResultLabel);
-		
-		
+
+
 
 		// -- Track set-up --
 		ArrayList<Double> photoCells = new ArrayList<>();
@@ -125,24 +127,36 @@ public class Main extends Application {
 			if (!nameField.getText().isEmpty()) { // Check if the nameField is not empty.
 				if (k10.isSelected()) { // Check if the 10Km checkbox is selected.
 					if (jaktStart.isSelected()) {
-						skierList.add(new Skier(nameField.getText(),"jaktStart", 10000, skierIDGenerator()));
+						if (Race.raceSeedingList.isEmpty()) {
+							Alert alert = new Alert(Alert.AlertType.INFORMATION);
+							alert.setTitle("Ingen seedningslopp har genomförts");
+							alert.setHeaderText(null);
+							alert.setContentText("Deltagare måste tävla i antingen masstart eller individuell start först..");
+							alert.showAndWait();
+						}
+						else {
+							Skier skier = new Skier(nameField.getText(),"jaktStart", 10000, skierIDGenerator());
+							
+						}
 					}
 					if (massStart.isSelected()) {
-						skierList.add(new Skier(nameField.getText(), "massStart", 10000, skierIDGenerator()));
+						Skier skier = new Skier(nameField.getText(), "massStart", 10000, skierIDGenerator());
 					}
-					if (staggeredStart.isSelected()) {
-						skierList.add(new Skier(nameField.getText(), "staggeredStart", 10000, skierIDGenerator()));
+					if (individuellStart.isSelected()) {
+						skierList.add(new Skier(nameField.getText(), "individuellStart", 10000, skierIDGenerator()));
+						setStartTime(15);
 					}
 				}
 			}
 		});
 
+
 		// Check if all skiers in the list have the same raceDistance.
 		if (raceDistanceCheck()) {
-		    photoCells.clear();
-		    for (double i = 1000; i <= race.getTrack().getDistance(); i += 1000) {
-		        photoCells.add(i);
-		    }
+			photoCells.clear();
+			for (double i = 1000; i <= race.getTrack().getDistance(); i += 1000) {
+				photoCells.add(i);
+			}
 		}
 
 		// -- Region settings --
@@ -160,7 +174,7 @@ public class Main extends Application {
 		Table table = new Table();        
 		resultsTable = table.getTableView();
 		resultsTable.setItems(skierList);
-		
+
 		// -- New code 13/12/2024 -- 
 		// Table to show results from the seeding Race.
 		Table seededTable = new Table();
@@ -171,7 +185,7 @@ public class Main extends Application {
 		VBox rightRegion = new VBox();
 		rightRegion.getChildren().addAll(pane2, seededTable.getTableView());
 		leftRegion.getChildren().addAll(pane, resultsTable);
-		
+
 		// Combine leftRegion and rightRegion into centerRegion
 		HBox centerRegion = new HBox();
 		centerRegion.getChildren().addAll(leftRegion, rightRegion);
@@ -224,6 +238,20 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+	public void setStartTime(int interval) {
+		for (int i = 0; i < skierList.size(); i++) {
+			if (i == 0) {
+				skierList.get(i).getTimer().setStartTime(LocalTime.of(00, 00, 00));
+			}
+			else if (i >= 1) {
+				LocalTime previousStartTime = skierList.get(i - 1).getTimer().getStartTime();
+				LocalTime newStartTime = previousStartTime.plusSeconds(interval);
+				skierList.get(i).getTimer().setStartTime(newStartTime);
+				resultsTable.refresh();
+			}
+		}
+	}
+
 	// Helper method create skier id number.
 	public int skierIDGenerator() {
 		if (skierList.isEmpty()) {
@@ -232,7 +260,7 @@ public class Main extends Application {
 			return skierList.size() + 1;
 		}
 	}
-	
+
 	// Helper method to check if all Skiers in the skierList have the same raceDistance.
 	private boolean raceDistanceCheck() {
 		for (int i = 0; i < Main.skierList.size(); i++) {
@@ -242,7 +270,7 @@ public class Main extends Application {
 		}
 		return true;
 	}
-	
+
 	// -- New code 15/12/2024 --
 	// Search function to be used for search button in GUI.
 	private String search(String input) {
@@ -255,9 +283,9 @@ public class Main extends Application {
 				for (int i = 0; i < tempList.size(); i++) {
 					if (tempList.get(i).getName().equals(skier.getName())) {
 						if (i == 0 || i == 1)
-						return ("Deltagare med startnummer \"" + searchNum + "\" placerade i " + (i+1) + ":a plats."  );
+							return ("Deltagare med startnummer \"" + searchNum + "\" placerade i " + (i+1) + ":a plats."  );
 						else {
-						return ("Deltagare med startnummer \"" + searchNum + "\" placerade i " + (i+1) + ":e plats."  );
+							return ("Deltagare med startnummer \"" + searchNum + "\" placerade i " + (i+1) + ":e plats."  );
 						}
 					}
 				}
@@ -273,22 +301,22 @@ public class Main extends Application {
 	// -- New code 15/12/2024 --
 	// This is just recycled code from the race class. The only difference in this method is that it getsFinishTime() instead of getsDeserializedFinishTime().
 	// This is due to how deserializedFinishTime is stored as an ObservableSimpleProperty.
-	  static void bubbleSort(ObservableList<Skier> resultsList) {
-	        for (int i = 0; i < resultsList.size() - 1; i++) { 
-	            for (int j = 0; j < resultsList.size() - i - 1; j++) { 
-	                if (resultsList.get(j).getFinishTime().isAfter(resultsList.get(j + 1).getFinishTime())) {
-	                    Skier temp = resultsList.get(j);
-	                    resultsList.set(j, resultsList.get(j + 1));
-	                    resultsList.set(j + 1, temp);
-	                }
-	            }
-	        }
-	        for (int i = 0; i < resultsList.size(); i++) { // This will run after the list has been sorted and will assign the skiers a new sorting number.
-	        	resultsList.get(i).setStartNumber(i+1);
-	        }
-	    }
+	static void bubbleSort(ObservableList<Skier> resultsList) {
+		for (int i = 0; i < resultsList.size() - 1; i++) { 
+			for (int j = 0; j < resultsList.size() - i - 1; j++) { 
+				if (resultsList.get(j).getFinishTime().isAfter(resultsList.get(j + 1).getFinishTime())) {
+					Skier temp = resultsList.get(j);
+					resultsList.set(j, resultsList.get(j + 1));
+					resultsList.set(j + 1, temp);
+				}
+			}
+		}
+		for (int i = 0; i < resultsList.size(); i++) { // This will run after the list has been sorted and will assign the skiers a new sorting number.
+			resultsList.get(i).setStartNumber(i+1);
+		}
+	}
 
-	 // --
+	// --
 	public static void main(String[] args) {
 		launch(args);
 	}

@@ -17,12 +17,12 @@ import javafx.collections.ObservableList;
 public class Race {
     private Track track;
     private ObservableList<Skier> skiers;
-    private int milliseconds = 5000;
+    private int milliseconds = 1000;
     private LocalTime localTime = LocalTime.of(00, 00, 00, 00);
     private int speedSimulator = 1;
     Skier leader; 
     static ObservableList<Skier> raceSeedingList = FXCollections.observableArrayList();
-
+    static ArrayList<SerializableSkier> deserializedSkiers;
     public Race(Track track, ObservableList<Skier> skiers) {
         this.track = track;
         this.skiers = skiers;
@@ -71,7 +71,8 @@ public class Race {
     public void startRace() {
         Thread thread = new Thread(() -> {
             for (Skier skier : getSkiers()) {
-                skier.getTimer().setStartTime(localTime);
+        			System.out.println(skier.getTimer().getStartTime());
+               // skier.getTimer().setStartTime(localTime);
                 skier.start();
             }
             simulateRace();
@@ -85,12 +86,15 @@ public class Race {
             addTime(getMilliseconds());
             for (Skier skier : getSkiers()) {
                 skierAction(skier);
-                Platform.runLater(() -> skier.updateTime());
+                Platform.runLater(() -> {
+                    skier.updateTime();  // Updates the time
+                    skier.updateTableView(); // Update start time (using the newly created method)
+                });
             }
         }
         // -- New code 13/12/2024
         serializeSkiers(Main.skierList);
-        ArrayList<SerializableSkier> deserializedSkiers = deseralizer(); // Deserializer method called. Returns an ArrayList of SerializableSkier objects from the .xml file and stores them in an ArrayList called "deserializedSkiers".
+        deserializedSkiers = deseralizer(); // Deserializer method called. Returns an ArrayList of SerializableSkier objects from the .xml file and stores them in an ArrayList called "deserializedSkiers".
         bubbleSortSeededSkierList(conversionForTableView(deserializedSkiers));
     }
      // --
@@ -214,6 +218,7 @@ public class Race {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Ensures correct formatting of finish time.
                 serializeSkier.setName(skier.getName());
                 serializeSkier.setStartNumber(skier.getStartNumber());
+                serializeSkier.setStartTime(skier.getTimer().getStartTime().toString());
                 serializeSkier.setSpeed(skier.getSpeed());
                 serializeSkier.setFinished(skier.isFinished());
                 serializeSkier.setStartType(skier.getStartType());

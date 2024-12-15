@@ -15,6 +15,7 @@ public class Table {
     TableColumn<Skier, Integer> skierIDCol = new TableColumn<>("ID");
     TableColumn<Skier, String> nameCol = new TableColumn<>("Name");
     TableColumn<Skier, LocalTime> finishTimeCol = new TableColumn<>("Finish time");
+    TableColumn<Skier, LocalTime> startTimeCol = new TableColumn<>("Start time");
     TableColumn<Skier, Integer> distanceTravelledCol = new TableColumn<>("Distance travelled");
     TableColumn<Skier, String> checkPointTimeCol = new TableColumn<>("Checkpoint time");
     TableColumn<Skier, Duration> timeFromLeaderCol = new TableColumn<>("Time from leader");
@@ -22,6 +23,7 @@ public class Table {
     public Table() {
         skierIDCol.setCellValueFactory(new PropertyValueFactory<>("startNumber"));        
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         finishTimeCol.setCellValueFactory(new PropertyValueFactory<>("finishTime"));
         distanceTravelledCol.setCellValueFactory(new PropertyValueFactory<>("distance"));
         checkPointTimeCol.setCellValueFactory(new PropertyValueFactory<>("lastCheckPointTime"));
@@ -49,10 +51,18 @@ public class Table {
             }
         });
         
-        getTableView().getColumns().addAll(skierIDCol, nameCol, distanceTravelledCol, finishTimeCol, checkPointTimeCol, timeFromLeaderCol);
+        getTableView().getColumns().addAll(skierIDCol, nameCol, startTimeCol, distanceTravelledCol, finishTimeCol, checkPointTimeCol, timeFromLeaderCol);
     }
 
-    public TableView<Skier> getTableView() {
+    public TableColumn<Skier, LocalTime> getStartTimeCol() {
+		return startTimeCol;
+	}
+
+	public void setStartTimeCol(TableColumn<Skier, LocalTime> startTimeCol) {
+		this.startTimeCol = startTimeCol;
+	}
+
+	public TableView<Skier> getTableView() {
         return tableView;
     }
 

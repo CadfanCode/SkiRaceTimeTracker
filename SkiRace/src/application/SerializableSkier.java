@@ -19,12 +19,13 @@ public class SerializableSkier implements Serializable {
     private String lastCheckPointTime;
     private String timeFromLeader;
     private String finishTime;
+    private String startTime;
     private int distance;
     
     public SerializableSkier() {}
 
 	public SerializableSkier(String name, int startNumber, double speed, boolean finished, String startType,
-		int raceDistance, String lastCheckPointTime, String timeFromLeader, String finishTime, int distance) {
+		int raceDistance, String lastCheckPointTime, String timeFromLeader, String finishTime, String startTime, int distance) {
 		this.name = name;
 		this.startNumber = startNumber;
 		this.speed = speed;
@@ -35,6 +36,15 @@ public class SerializableSkier implements Serializable {
 		this.timeFromLeader = timeFromLeader;
 		this.finishTime = finishTime;
 		this.distance = distance;
+		this.startTime = startTime;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
 	}
 
 	public String getName() {
