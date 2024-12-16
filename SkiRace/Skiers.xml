@@ -2,19 +2,19 @@
 <java version="21.0.5" class="java.beans.XMLDecoder">
  <object class="application.SerializableSkier">
   <void property="distance">
-   <int>10045</int>
+   <int>10017</int>
   </void>
   <void property="finishTime">
-   <string>00:11:54</string>
+   <string>00:08:40</string>
   </void>
   <void property="finished">
    <boolean>true</boolean>
   </void>
   <void property="lastCheckPointTime">
-   <string>00:11:54</string>
+   <string>00:08:40</string>
   </void>
   <void property="name">
-   <string>gfdgfd</string>
+   <string>Bob</string>
   </void>
   <void property="raceDistance">
    <int>10000</int>
@@ -32,30 +32,30 @@
    <string>individuellStart</string>
   </void>
   <void property="timeFromLeader">
-   <string>00:02:143</string>
+   <string>00:00:00</string>
   </void>
  </object>
  <object class="application.SerializableSkier">
   <void property="distance">
-   <int>10042</int>
+   <int>10022</int>
   </void>
   <void property="finishTime">
-   <string>00:09:21</string>
+   <string>00:10:48</string>
   </void>
   <void property="finished">
    <boolean>true</boolean>
   </void>
   <void property="lastCheckPointTime">
-   <string>00:09:36</string>
+   <string>00:11:03</string>
   </void>
   <void property="name">
-   <string>gfdgfd</string>
+   <string>Bill</string>
   </void>
   <void property="raceDistance">
    <int>10000</int>
   </void>
   <void property="speed">
-   <double>30.0</double>
+   <double>26.524889416156842</double>
   </void>
   <void property="startNumber">
    <int>2</int>
@@ -67,30 +67,30 @@
    <string>individuellStart</string>
   </void>
   <void property="timeFromLeader">
-   <string>00:00:05</string>
+   <string>00:00:00</string>
   </void>
  </object>
  <object class="application.SerializableSkier">
   <void property="distance">
-   <int>10048</int>
+   <int>10022</int>
   </void>
   <void property="finishTime">
-   <string>00:09:01</string>
+   <string>00:13:26</string>
   </void>
   <void property="finished">
    <boolean>true</boolean>
   </void>
   <void property="lastCheckPointTime">
-   <string>00:09:31</string>
+   <string>00:13:56</string>
   </void>
   <void property="name">
-   <string>gfdgfd</string>
+   <string>James</string>
   </void>
   <void property="raceDistance">
    <int>10000</int>
   </void>
   <void property="speed">
-   <double>30.0</double>
+   <double>26.490661379520606</double>
   </void>
   <void property="startNumber">
    <int>3</int>
@@ -102,7 +102,77 @@
    <string>individuellStart</string>
   </void>
   <void property="timeFromLeader">
-   <string>00:00:00</string>
+   <string>00:02:173</string>
+  </void>
+ </object>
+ <object class="application.SerializableSkier">
+  <void property="distance">
+   <int>10016</int>
+  </void>
+  <void property="finishTime">
+   <string>00:12:33</string>
+  </void>
+  <void property="finished">
+   <boolean>true</boolean>
+  </void>
+  <void property="lastCheckPointTime">
+   <string>00:13:18</string>
+  </void>
+  <void property="name">
+   <string>Jill</string>
+  </void>
+  <void property="raceDistance">
+   <int>10000</int>
+  </void>
+  <void property="speed">
+   <double>24.209599799559804</double>
+  </void>
+  <void property="startNumber">
+   <int>4</int>
+  </void>
+  <void property="startTime">
+   <string>00:00:45</string>
+  </void>
+  <void property="startType">
+   <string>individuellStart</string>
+  </void>
+  <void property="timeFromLeader">
+   <string>00:02:135</string>
+  </void>
+ </object>
+ <object class="application.SerializableSkier">
+  <void property="distance">
+   <int>10011</int>
+  </void>
+  <void property="finishTime">
+   <string>00:10:44</string>
+  </void>
+  <void property="finished">
+   <boolean>true</boolean>
+  </void>
+  <void property="lastCheckPointTime">
+   <string>00:11:44</string>
+  </void>
+  <void property="name">
+   <string>Jon</string>
+  </void>
+  <void property="raceDistance">
+   <int>10000</int>
+  </void>
+  <void property="speed">
+   <double>20.6389642970846</double>
+  </void>
+  <void property="startNumber">
+   <int>5</int>
+  </void>
+  <void property="startTime">
+   <string>00:01</string>
+  </void>
+  <void property="startType">
+   <string>individuellStart</string>
+  </void>
+  <void property="timeFromLeader">
+   <string>00:00:41</string>
   </void>
  </object>
 </java>

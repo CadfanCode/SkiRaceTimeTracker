@@ -35,10 +35,9 @@ public class Skier implements Ski {
         this.startType = startType;
     }
 
-    public Skier(String name, String startType, int raceDistance, int startNumber) {
+    public Skier(String name, int raceDistance, int startNumber) {
         this.name = name; 
         this.startNumber = startNumber;
-        this.startType = startType;
         this.raceDistance = raceDistance;
     }
     

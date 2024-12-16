@@ -62,32 +62,12 @@ public class Main extends Application {
 		k10.setId("10000");
 		k10.setSelected(true);
 		checkBoxesDistance.add(k10);
-		/*
-        CheckBox k5 = new CheckBox("5 km");
-        k5.setId("5000");
-        CheckBox k10 = new CheckBox("10 km");
-        k10.setId("10000");
-        CheckBox k20 = new CheckBox("20 km");
-        k20.setId("20000");
-        CheckBox k40 = new CheckBox("40 km");
-        k40.setId("40000");
-        checkBoxesDistance.add(k5);
-        checkBoxesDistance.add(k20);
-        checkBoxesDistance.add(k40);
-		 */
+
 		raceDistanceVBox.getChildren().addAll(raceDistanceLabel, k10); // k5, k20, k40 Removed.
 		raceDistanceVBox.setPadding(new Insets(20));
 		raceDistanceVBox.setMinSize(200, 100);
 		raceDistanceVBox.setAlignment(Pos.CENTER);
 		raceDistanceVBox.setSpacing(1);
-
-		TilePane startTypeTilePane = new TilePane();
-		CheckBox massStart = new CheckBox("Masstart");
-		CheckBox individuellStart = new CheckBox("Individuell start");
-		CheckBox jaktStart = new CheckBox("Jaktstart");
-		startTypeTilePane.getChildren().addAll(massStart, individuellStart, jaktStart);
-		startTypeTilePane.setAlignment(Pos.CENTER);
-		startTypeTilePane.setMinSize(300, 75);
 
 		// -- Search Field --
 		HBox searchBox = new HBox();
@@ -125,32 +105,10 @@ public class Main extends Application {
 		Button addSkier = new Button("Add skier");
 		addSkier.setOnMouseClicked(event -> {
 			if (!nameField.getText().isEmpty()) { // Check if the nameField is not empty.
-				if (k10.isSelected()) { // Check if the 10Km checkbox is selected.
-					if (jaktStart.isSelected()) {
-						if (Race.raceSeedingList.isEmpty()) {
-							Alert alert = new Alert(Alert.AlertType.INFORMATION);
-							alert.setTitle("Ingen seedningslopp har genomförts");
-							alert.setHeaderText(null);
-							alert.setContentText("Deltagare måste tävla i antingen masstart eller individuell start först..");
-							alert.showAndWait();
-						}
-						else {
-							Skier skier = new Skier(nameField.getText(),"jaktStart", 10000, skierIDGenerator());
-							
-						}
-					}
-					if (massStart.isSelected()) {
-						Skier skier = new Skier(nameField.getText(), "massStart", 10000, skierIDGenerator());
-					}
-					if (individuellStart.isSelected()) {
-						skierList.add(new Skier(nameField.getText(), "individuellStart", 10000, skierIDGenerator()));
-						setStartTime(15);
-					}
-				}
+				Skier skier = new Skier(nameField.getText(), 10000, skierIDGenerator());
+				skierList.add(skier);
 			}
 		});
-
-
 		// Check if all skiers in the list have the same raceDistance.
 		if (raceDistanceCheck()) {
 			photoCells.clear();
@@ -161,7 +119,7 @@ public class Main extends Application {
 
 		// -- Region settings --
 		HBox innerTopBox = new HBox();
-		innerTopBox.getChildren().addAll(nameFieldVBox, raceDistanceVBox, startTypeTilePane);
+		innerTopBox.getChildren().addAll(nameFieldVBox, raceDistanceVBox);
 
 		HBox outerTopBox = new HBox(addSkier);
 		outerTopBox.setAlignment(Pos.BOTTOM_RIGHT);
@@ -195,7 +153,43 @@ public class Main extends Application {
 		// -- 
 
 		// --- Bottom Region ---
-		HBox bottomRegion = new HBox();
+		VBox bottomRegion = new VBox();
+		VBox startTypeVBox = new VBox();
+		HBox startTypeHBox = new HBox();
+		CheckBox massStart = new CheckBox("Masstart");
+		CheckBox individuellStart = new CheckBox("Individuell start");
+		CheckBox jaktStart = new CheckBox("Jaktstart");
+		Button choiceButton = new Button("Välj StartTyp");
+		choiceButton.setOnMouseClicked(event -> {
+			for (Skier skier: skierList) {
+				if (massStart.isSelected()) {
+					skier.setStartType("massStart");
+					setStartTime();
+				}
+				else if (jaktStart.isSelected()) {
+					skier.setStartType("jaktStart");
+				}
+				else if (individuellStart.isSelected()) {
+					skier.setStartType("individuellStart");
+					setStartTime(15); 
+				}
+				else {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					alert.setTitle("Ingen starttyp har valts!");
+					alert.setHeaderText(null);
+					alert.setContentText("Välj starttyp!");
+					alert.showAndWait();
+				}
+			}
+		});
+
+		startTypeHBox.getChildren().addAll(massStart, individuellStart, jaktStart);
+		startTypeHBox.setAlignment(Pos.CENTER);
+		startTypeHBox.setMinSize(300, 75);
+		startTypeVBox.getChildren().addAll(startTypeHBox, choiceButton);
+		startTypeVBox.setAlignment(Pos.CENTER);
+
+		HBox bottomLower = new HBox();
 		startBtn = new Button("Start");
 		stopBtn = new Button("Stop");
 
@@ -221,11 +215,12 @@ public class Main extends Application {
 			raceInProgress = false; 
 		});
 
-		bottomRegion.getChildren().addAll(startBtn, stopBtn);
-		bottomRegion.setAlignment(Pos.CENTER);
-		bottomRegion.setSpacing(50);
-		bottomRegion.setPadding(new Insets(20));
-		bottomRegion.setStyle("-fx-background-color: #fafaa7");
+		bottomLower.getChildren().addAll(startBtn, stopBtn);
+		bottomLower.setAlignment(Pos.CENTER);
+		bottomLower.setSpacing(50);
+		bottomLower.setPadding(new Insets(20));
+		bottomLower.setStyle("-fx-background-color: #fafaa7");
+		bottomRegion.getChildren().addAll(startTypeVBox, bottomLower);
 
 		// --- Main Layout ---
 		BorderPane borderPane = new BorderPane();
@@ -249,6 +244,12 @@ public class Main extends Application {
 				skierList.get(i).getTimer().setStartTime(newStartTime);
 				resultsTable.refresh();
 			}
+		}
+	}
+
+	public void setStartTime() {
+		for (Skier skier: skierList) {
+			skier.getTimer().setStartTime(LocalTime.of(00, 00, 00, 00));
 		}
 	}
 
