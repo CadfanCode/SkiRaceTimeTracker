@@ -78,25 +78,72 @@ public class Race {
         });
         thread.start();
     }
-
-     void simulateRace() {
+    
+    void simulateRace() {
         while (!skiersFinished()) {
-            UtilitySki.interval(getSpeedSimulator());
-            addTime(getMilliseconds());
+            UtilitySki.interval(getSpeedSimulator()); // Tidsintervall för simuleringen
+            addTime(getMilliseconds()); // Lägg till tid för loppet
+
             for (Skier skier : getSkiers()) {
-            	if (skier.getTimer().getStartTime().isBefore(getLocalTime())) {
-            		skierAction(skier);
-            		Platform.runLater(() -> {
-            			skier.updateTime();  // Updates the time
-            		});
-            	}
+                if (skier.getTimer().getStartTime().isBefore(getLocalTime())) {
+                    skierAction(skier); // Uppdatera deltagare
+
+                    Platform.runLater(() -> {
+                        skier.updateTime(); // Uppdatera skidåkarens tid
+
+                        // Uppdatera ledaren baserat på distans och måltid
+                        updateLeader();
+
+                        // Beräkna tidsskillnad mellan den aktuella ledaren och deltagare
+                        calculateTimeFromLeader(skier);
+                    });
+                }
             }
         }
-        // -- New code 13/12/2024
+
+        // Efter loppet: serialisera deltagare och lagra resultat
         serializeSkiers(Main.skierList);
-        deserializedSkiers = deseralizer(); // Deserializer method called. Returns an ArrayList of SerializableSkier objects from the .xml file and stores them in an ArrayList called "deserializedSkiers".
+        deserializedSkiers = deseralizer();
         bubbleSortSeededSkierList(conversionForTableView(deserializedSkiers));
     }
+    
+    
+    
+    private void updateLeader() {
+        for (Skier skier : getSkiers()) {
+            if (leader == null || 
+                (skier.getDistance() > leader.getDistance() && !skier.isFinished()) || 
+                (skier.getFinishTime() != null && 
+                 (leader.getFinishTime() == null || skier.getFinishTime().isBefore(leader.getFinishTime())))) {
+                leader = skier; // Uppdatera ledaren
+            }
+        }
+    }
+    
+    
+    private void calculateTimeFromLeader(Skier skier) {
+        if (leader != null) {
+            Duration timeDifference;
+
+            if (skier.getFinishTime() != null) {
+                // Om deltagare har gått i mål
+                timeDifference = Duration.between(leader.getFinishTime(), skier.getFinishTime());
+            } else if (leader.getLastCheckPointTime() != null && skier.getLastCheckPointTime() != null) {
+                // Om både ledaren och motståndare är vid checkpoint
+                timeDifference = Duration.between(leader.getLastCheckPointTime(), skier.getLastCheckPointTime());
+            } else {
+                // Om det inte finns giltiga tider
+                timeDifference = Duration.ZERO;
+            }
+
+            // Omvandlar negativ tidsskillnad till absolut värde
+            skier.setTimeFromLeader(timeDifference.abs());
+        } else {
+            skier.setTimeFromLeader(Duration.ZERO);
+        }
+    }
+    
+    
      // --
      
      // -- New code 13/12/2025 --
@@ -169,13 +216,12 @@ public class Race {
         for (int i = skier.getTimer().getCheckPointTimes().size(); i < track.getPhotoCells().size(); i++) {
             if (skier.getDistance() >= track.getPhotoCells().get(i)) {
                 addCheckPointTimeToSkier(skier, track.getPhotoCells().get(i));
-                leader = Main.skierList.get(0);
-                FindLeader();
-                // Calculate the duration between the leader and the skier
-                Duration timeDifference = Duration.between(leader.getLastCheckPointTime(), skier.getLastCheckPointTime());
+                updateLeader(); // Uppdatera ledaren här
+                
+                Duration timeDifference = Duration.between(leader.getLastCheckPointTime(), skier.getLastCheckPointTime()).abs();
                 skier.setTimeFromLeader(timeDifference);
             } else {
-                break; 
+                break;
             }
         }
     }
@@ -183,39 +229,70 @@ public class Race {
     // -- New Code 13/12/2024 --
     // A helper method to reformat a duration variable (stored within a SimpleObjetProperty wrapper) to a string in a readable format. -- 
     public String formatDuration(SimpleObjectProperty<Duration> simpleObjectProperty) {
-    	Duration duration = simpleObjectProperty.get(); // This 'extracts' the Duration value from it's simpleObjectProperty wrapper.
-    	long hours = duration.toHours();
-    	long minutes = duration.toMinutes();
-    	long seconds = duration.toSeconds();
-    	return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        if (simpleObjectProperty == null || simpleObjectProperty.get() == null) {
+            return "00:00:00"; // Säkerhetskontroll för att undvika fel
+        }
+        Duration duration = simpleObjectProperty.get();
+        long hours = duration.toHours();
+        long minutes = duration.toMinutesPart(); // Separerar minuter
+        long seconds = duration.toSecondsPart(); // Separerar sekunder
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
-    // --
-
+    
+    
+    public String formatDuration(Duration duration) {
+        long hours = duration.toHours();
+        long minutes = duration.toMinutesPart();
+        long seconds = duration.toSecondsPart();
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+    
+    
+      
     public void addCheckPointTimeToSkier(Skier skier, double distance) {
-        if (skier.getDistance() >= distance ) {
+        if (skier.getDistance() >= distance) {
             skier.getTimer().getCheckPointTimes().add(localTime);
             skier.setLastCheckPointTime(skier.getTimer().getCheckPointTimes().getLast());
+
+
+        } else {
+            System.out.println("Skier: " + skier.getName() + " has not reached distance: " + distance);
         }
     }
+  
     
     // -- Find Leader --
     public void FindLeader() {
     	for (Skier skier : Main.skierList) {
     		if (skier.getDistance() > leader.getDistance()) {
     			leader = skier;
+
     		}
     	}
     }
+    
     
     public void serializeSkiers(ObservableList<Skier> skierList) {
         try {
             ArrayList<SerializableSkier> skiers = new ArrayList<>();
             Serialize serialize = new Serialize();
             
+            // Hitta den aktuella ledaren (skidåkaren med den snabbaste sluttiden)
+            Skier leader = null;
+            for (Skier skier : skierList) {
+                if (skier.getFinishTime() != null) {
+                    if (leader == null || skier.getFinishTime().isBefore(leader.getFinishTime())) {
+                        leader = skier;
+                    }
+                }
+            }
+
             // Populate the skiers list with SerializableSkier objects
             for (Skier skier : skierList) {
                 SerializableSkier serializeSkier = new SerializableSkier();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Ensures correct formatting of finish time.
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                
+                // Sätt vanliga attribut
                 serializeSkier.setName(skier.getName());
                 serializeSkier.setStartNumber(skier.getStartNumber());
                 serializeSkier.setStartTime(skier.getTimer().getStartTime().toString());
@@ -224,17 +301,29 @@ public class Race {
                 serializeSkier.setStartType(skier.getStartType());
                 serializeSkier.setRaceDistance(skier.getRaceDistance());
                 serializeSkier.setLastCheckPointTime(skier.getLastCheckPointTime().toString());
-                serializeSkier.setTimeFromLeader(formatDuration(skier.getTimeFromLeader()));
-                serializeSkier.setFinishTime(skier.getFinishTime().toString());
+                serializeSkier.setFinishTime(skier.getFinishTime() != null ? skier.getFinishTime().toString() : "N/A");
                 serializeSkier.setDistance(skier.getDistance());
-            
+
+                // Beräkna och sätt timeFromLeader
+                if (leader != null && leader.getFinishTime() != null && skier.getFinishTime() != null) {
+                    Duration timeDifference = Duration.between(leader.getFinishTime(), skier.getFinishTime());
+                    skier.setTimeFromLeader(timeDifference); // Uppdatera skidåkarens timeFromLeader
+                    serializeSkier.setTimeFromLeader(formatDuration(timeDifference));
+                } else {
+                    serializeSkier.setTimeFromLeader("N/A"); // Om det saknas data
+                }
+                
                 skiers.add(serializeSkier);
             }
+
+            // Serialisera listan av skidåkare
             serialize.encodeObject(skiers);
         } catch (IOException ex) {
             System.out.println("Something went wrong with serialization: " + ex.getMessage());
         }
     }
+
+    
 
     public ArrayList<SerializableSkier> deseralizer() {
     	
@@ -249,9 +338,7 @@ public class Race {
 		return null;
     }
     
-    
-    
-    
+
     
     
 }
