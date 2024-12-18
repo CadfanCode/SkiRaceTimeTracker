@@ -1,26 +1,19 @@
 package application;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Main extends Application {
 
@@ -163,7 +156,7 @@ public class Main extends Application {
 				}
 				else if (individuellStart.isSelected()) {
 					skier.setStartType("individuellStart");
-					setStartTime(15); 
+					setStartTime(45); 
 				}
 				else {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -234,6 +227,9 @@ public class Main extends Application {
 
 		        // Start the race
 		        race.startRace();
+		        // individuell start
+//		        race.startRace(Parameter jaktstart/individuell start)
+
 		    }
 		});
 

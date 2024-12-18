@@ -51,7 +51,6 @@ public class Skier implements Ski {
         for (int i = 0; i < 5; i++) {
             accelerate();
         }
-        distanceTraveled(1000);
     }
 
     @Override

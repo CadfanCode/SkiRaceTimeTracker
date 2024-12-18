@@ -1,8 +1,6 @@
 
 package application;
 
-import java.beans.XMLEncoder;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -19,7 +17,7 @@ public class Race {
     private ObservableList<Skier> skiers;
     private int milliseconds = 1000;
     private LocalTime localTime = LocalTime.of(00, 00, 00, 00);
-    private int speedSimulator = 1;
+    private int speedSimulator = 10;
     Skier leader; 
     static ObservableList<Skier> raceSeedingList = FXCollections.observableArrayList();
     static ArrayList<SerializableSkier> deserializedSkiers;
@@ -86,10 +84,12 @@ public class Race {
             UtilitySki.interval(getSpeedSimulator());
             addTime(getMilliseconds());
             for (Skier skier : getSkiers()) {
-                skierAction(skier);
-                Platform.runLater(() -> {
-                    skier.updateTime();  // Updates the time
-                });
+            	if (skier.getTimer().getStartTime().isBefore(getLocalTime())) {
+            		skierAction(skier);
+            		Platform.runLater(() -> {
+            			skier.updateTime();  // Updates the time
+            		});
+            	}
             }
         }
         // -- New code 13/12/2024
