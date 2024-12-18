@@ -33,6 +33,7 @@ public class Main extends Application {
 	int dist;
 	Button startBtn;
 	Button stopBtn;
+	Button resetBtn;
 	boolean raceInProgress;
 	static TableView<Skier> resultsTable;
 	TableView<Skier> seededResultsTable;
@@ -135,18 +136,8 @@ public class Main extends Application {
 
 		// -- New code 13/12/2024 -- 
 		// Table to show results from the seeding Race.
-		Table seededTable = new Table();
-		seededResultsTable = seededTable.getTableView();
-		seededResultsTable.setItems(Race.raceSeedingList);
-		Pane pane2 = new Pane();
-		VBox leftRegion = new VBox();
-		VBox rightRegion = new VBox();
-		rightRegion.getChildren().addAll(pane2, seededTable.getTableView());
-		leftRegion.getChildren().addAll(pane, resultsTable);
-
-		// Combine leftRegion and rightRegion into centerRegion
 		HBox centerRegion = new HBox();
-		centerRegion.getChildren().addAll(leftRegion, rightRegion);
+		centerRegion.getChildren().addAll(pane, resultsTable);
 		centerRegion.setSpacing(20); // Add spacing between left and right regions
 		centerRegion.setPadding(new Insets(10));
 		centerRegion.setAlignment(Pos.CENTER);
@@ -168,6 +159,7 @@ public class Main extends Application {
 				}
 				else if (jaktStart.isSelected()) {
 					skier.setStartType("jaktStart");
+					setStartTime(Race.deserializedSkiers);
 				}
 				else if (individuellStart.isSelected()) {
 					skier.setStartType("individuellStart");
@@ -192,30 +184,70 @@ public class Main extends Application {
 		HBox bottomLower = new HBox();
 		startBtn = new Button("Start");
 		stopBtn = new Button("Stop");
+		resetBtn = new Button("Reset");
 
 		startBtn.setMinSize(50, 50);
 		stopBtn.setMinSize(50, 50);
+		resetBtn.setMinSize(50, 50);
 		startBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		stopBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+		resetBtn.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		startBtn.setStyle("-fx-background-color: #d9ceb0");
 		stopBtn.setStyle("-fx-background-color: #d9ceb0");
+		resetBtn.setStyle("-fx-background-color: #d9ceb0");
 
 		startBtn.setOnMouseClicked(event -> {
-			if (!raceInProgress) {
-				for (CheckBox checkbox : checkBoxesDistance) {
-					if(checkbox.isSelected()) {
-						race.getTrack().setDistance(Double.parseDouble(checkbox.getId()));
-					}
-				}
-				race.startRace();
-			}
+		    if (!raceInProgress) {
+		        // Ensure all skiers have a valid start time
+		        boolean allStartTimesSet = skierList.stream()
+		            .allMatch(skier -> skier.getTimer().getStartTime() != null);
+
+		        if (!allStartTimesSet) {
+		            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		            alert.setTitle("Ingen starttid tillagd!");
+		            alert.setHeaderText(null);
+		            alert.setContentText("Se till att ni väljer en starttyp och trycker på \"Välj StartTyp\" för att bekräfta valet.");
+		            alert.showAndWait();
+		            return;
+		        }
+
+		        // Check that a distance is selected
+		        boolean distanceSelected = checkBoxesDistance.stream()
+		            .anyMatch(CheckBox::isSelected);
+
+		        if (!distanceSelected) {
+		            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		            alert.setTitle("Ingen distans vald!");
+		            alert.setHeaderText(null);
+		            alert.setContentText("Välj en distans innan du startar loppet.");
+		            alert.showAndWait();
+		            return;
+		        }
+
+		        // Set the race distance based on the selected checkbox
+		        for (CheckBox checkbox : checkBoxesDistance) {
+		            if (checkbox.isSelected()) {
+		                race.getTrack().setDistance(Double.parseDouble(checkbox.getId()));
+		                break;
+		            }
+		        }
+
+		        // Start the race
+		        race.startRace();
+		    }
 		});
+
 
 		stopBtn.setOnMouseClicked(event -> {
 			raceInProgress = false; 
 		});
 
-		bottomLower.getChildren().addAll(startBtn, stopBtn);
+		resetBtn.setOnMouseClicked(event -> {
+			skierList.clear(); 
+		});
+
+
+		bottomLower.getChildren().addAll(startBtn, stopBtn, resetBtn);
 		bottomLower.setAlignment(Pos.CENTER);
 		bottomLower.setSpacing(50);
 		bottomLower.setPadding(new Insets(20));
@@ -233,6 +265,7 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+	// setStartTime method for Individual starts
 	public void setStartTime(int interval) {
 		for (int i = 0; i < skierList.size(); i++) {
 			if (i == 0) {
@@ -247,9 +280,18 @@ public class Main extends Application {
 		}
 	}
 
+	// setStartTime method for massStart.
 	public void setStartTime() {
 		for (Skier skier: skierList) {
 			skier.getTimer().setStartTime(LocalTime.of(00, 00, 00, 00));
+		}
+	}
+
+	// setStartTimer method for jaktStart.
+	public void setStartTime(ArrayList<SerializableSkier> resultsList) {
+		for (int i = 0; i < resultsList.size(); i++) {
+			LocalTime temp = LocalTime.parse(resultsList.get(i).getTimeFromLeader()); // Get the time from leader from the results ArrayList.
+			skierList.get(i).getTimer().setStartTime(temp); // set the time from leader as the startTime in the skierList.
 		}
 	}
 
@@ -293,6 +335,7 @@ public class Main extends Application {
 				return "Ingen deltagare hittades.";
 			}
 		}
+
 		}  catch (NumberFormatException e) { // Catch the error if the users input cannot be parsed into an integer.
 			e.printStackTrace();
 		}
