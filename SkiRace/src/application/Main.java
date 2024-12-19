@@ -33,7 +33,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("SkiRaceTracker");
+		primaryStage.setTitle("SkiRaceTracker - Test");
 
 		// Initialize the list of athletes
 		skierList = FXCollections.observableArrayList();
