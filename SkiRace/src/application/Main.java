@@ -158,14 +158,16 @@ public class Main extends Application {
 					LocalTime referenceTime = skierList.get(0).getLastCheckPointTime();
 					for (Skier skiGuy : skierList) {
 						Duration delay = Duration.between(referenceTime, skiGuy.getLastCheckPointTime());
-						skiGuy.setStartTime(LocalTime.now().plus(delay));
+						skiGuy.setStartTime(LocalTime.of(00,00,00).plus(delay)); 
+						skiGuy.setDistance(0); // Reset race distance for each skier.
+						skiGuy.setFinishTime(LocalTime.of(00,00,00)); // Reset finish to zero for each skier.
+						//skiGuy.setLastCheckPointTime(LocalTime.of(00, 00, 00));// Reset finish time for each skier.
 					}
 				}
 				else if (individuellStart.isSelected()) {
 					skier.setStartType("individuellStart");
-					setStartTime(45); 
+					setStartTime(15); 
 				}
-
 				else {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					alert.setTitle("Ingen starttyp har valts!");
