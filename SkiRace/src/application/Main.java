@@ -12,8 +12,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Main extends Application {
 
@@ -152,12 +154,18 @@ public class Main extends Application {
 				}
 				else if (jaktStart.isSelected()) {
 					skier.setStartType("jaktStart");
-					setStartTime(Race.deserializedSkiers);
+					skierList.sort(Comparator.comparing(Skier::getLastCheckPointTime));
+					LocalTime referenceTime = skierList.get(0).getLastCheckPointTime();
+					for (Skier skiGuy : skierList) {
+						Duration delay = Duration.between(referenceTime, skiGuy.getLastCheckPointTime());
+						skiGuy.setStartTime(LocalTime.now().plus(delay));
+					}
 				}
 				else if (individuellStart.isSelected()) {
 					skier.setStartType("individuellStart");
 					setStartTime(45); 
 				}
+
 				else {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					alert.setTitle("Ingen starttyp har valts!");
