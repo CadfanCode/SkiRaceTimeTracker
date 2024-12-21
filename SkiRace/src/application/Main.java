@@ -172,9 +172,12 @@ public class Main extends Application {
 						skiGuy.setDistance(0);
 						skiGuy.setFinishTime(LocalTime.of(00,00,00));
 						skiGuy.setLastCheckPointTime(LocalTime.of(00,00,00));
-						resultsTable.refresh();
+						skiGuy.setTimeFromLeader(null);
+						ArrayList<LocalTime> checkPoint = new ArrayList<>();						
+						skiGuy.getTimer().setCheckPointTimes(checkPoint);
 					}
-					
+					resultsTable.refresh();
+					race.setSkiers(skierList);
 					break;
 				}
 				else if (individuellStart.isSelected()) {
