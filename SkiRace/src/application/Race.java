@@ -18,7 +18,7 @@ public class Race {
     private ObservableList<Skier> skiers;
     private int milliseconds = 1000;
     private LocalTime localTime = LocalTime.of(00, 00, 00, 00);
-    private int speedSimulator = 50;
+    private int speedSimulator = 10;
     private Skier leader; 
     static ObservableList<Skier> raceSeedingList = FXCollections.observableArrayList();
     static ArrayList<SerializableSkier> deserializedSkiers;
@@ -76,8 +76,14 @@ public class Race {
     }
 
     public void startRace() {
+    	
+    	
+    	
         Thread thread = new Thread(() -> {
             for (Skier skier : getSkiers()) {
+                if(skier.getStartType().equals("jaktStart")) {
+                	updateLeaderJaktStart();
+                }
                 skier.start();
             }
             simulateRace();
@@ -98,9 +104,7 @@ public class Race {
                         skier.updateTime(); // Uppdatera skidåkarens tid
 
                         // Uppdatera ledaren baserat på distans och måltid
-//                        if(skier.getStartType().equals("jaktStart")) {
-//                        	updateLeaderJaktStart();
-//                        } else {
+
 //                        	updateLeader();                        	
 //                        }
 //                        
@@ -134,18 +138,18 @@ public class Race {
     	ArrayList<Skier> skiers = new ArrayList<>();
     	skiers.addAll(getSkiers());
     	skiers.sort(Comparator.comparing(Skier::getDistance));
-    	setLeader(skiers.getFirst());
-    	System.out.println(skiers.getFirst());
+    	setLeader(skiers.getLast());
     }
     
-    private void calculateTimeFromLeaderJaktStart(Skier skier) {
-    	System.out.println("jaktleader");
+    private void calculateTimeFromLeaderJaktStart(Skier skier) {    	
     	try {
     		int photoCellNumber = skier.getTimer().getCheckPointTimes().size() - 1;
     		LocalTime skierTime = skier.getTimer().getCheckPointTimes().get(photoCellNumber);
     		LocalTime leaderTime = leader.getTimer().getCheckPointTimes().get(photoCellNumber);
     		Duration timeDifference = Duration.between(leaderTime, skierTime);
     		Duration adjustedTimeDifference = timeDifference.plus(Duration.between(LocalTime.MIN, skier.getStartTime()));
+    		
+    		
     		skier.setTimeFromLeader(adjustedTimeDifference);    		
     	} catch (IndexOutOfBoundsException ex) {    		
     	}
@@ -246,6 +250,7 @@ public class Race {
                 if(skier.getStartType().equals("jaktStart")) {
                 	updateLeaderJaktStart();
                 	calculateTimeFromLeaderJaktStart(skier);
+                	return;
                 } else {
                 	updateLeader();                        	
                 }

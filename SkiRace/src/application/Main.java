@@ -172,7 +172,7 @@ public class Main extends Application {
 						skiGuy.setDistance(0);
 						skiGuy.setFinishTime(LocalTime.of(00,00,00));
 						skiGuy.setLastCheckPointTime(LocalTime.of(00,00,00));
-						skiGuy.setTimeFromLeader(null);
+						skiGuy.setTimeFromLeader(Duration.ZERO);
 						ArrayList<LocalTime> checkPoint = new ArrayList<>();						
 						skiGuy.getTimer().setCheckPointTimes(checkPoint);
 					}
