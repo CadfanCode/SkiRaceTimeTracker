@@ -152,16 +152,16 @@ public class Main extends Application {
 					skier.setStartType("massStart");
 					setStartTime();
 				}
-				else if (jaktStart.isSelected()) {
+				else if (jaktStart.isSelected()) {					
 					skier.setStartType("jaktStart");
-					skierList.sort(Comparator.comparing(Skier::getLastCheckPointTime));
-					LocalTime referenceTime = skierList.get(0).getLastCheckPointTime();
+					skierList.sort(Comparator.comparing(Skier::getFinishTime));
+					LocalTime referenceTime = skierList.get(0).getFinishTime();
 					for (Skier skiGuy : skierList) {
-						Duration delay = Duration.between(referenceTime, skiGuy.getLastCheckPointTime());
-						skiGuy.setStartTime(LocalTime.of(00,00,00).plus(delay)); 
+						Duration delay = Duration.between(referenceTime, skiGuy.getFinishTime());
+						setStartTime((int) delay.getSeconds()); 
 						skiGuy.setDistance(0); // Reset race distance for each skier.
 						skiGuy.setFinishTime(LocalTime.of(00,00,00)); // Reset finish to zero for each skier.
-						//skiGuy.setLastCheckPointTime(LocalTime.of(00, 00, 00));// Reset finish time for each skier.
+						skiGuy.setLastCheckPointTime(LocalTime.of(00, 00, 00));
 					}
 				}
 				else if (individuellStart.isSelected()) {
@@ -237,8 +237,6 @@ public class Main extends Application {
 
 		        // Start the race
 		        race.startRace();
-		        // individuell start
-//		        race.startRace(Parameter jaktstart/individuell start)
 
 		    }
 		});

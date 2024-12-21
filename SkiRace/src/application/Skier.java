@@ -61,7 +61,7 @@ public class Skier implements Ski {
 
     public void distanceTraveled(int milliSeconds) {
         double time = milliSeconds * 0.001;
-        setDistance((int)(getSpeed() * time) + getDistance());
+        setDistance(Math.min((int)(getSpeed() * time) + getDistance(), 10000));
     }
 
     @Override
