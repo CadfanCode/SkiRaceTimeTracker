@@ -146,7 +146,10 @@ public class Main extends Application {
 		CheckBox individuellStart = new CheckBox("Individuell start");
 		CheckBox jaktStart = new CheckBox("Jaktstart");
 		Button choiceButton = new Button("Välj StartTyp");
-		choiceButton.setOnMouseClicked(event -> {
+		
+		choiceButton.setOnMouseClicked(event -> {			
+			
+			race.resetRace();
 			for (Skier skier: skierList) {
 				if (massStart.isSelected()) {
 					skier.setStartType("massStart");
@@ -156,13 +159,23 @@ public class Main extends Application {
 					skier.setStartType("jaktStart");
 					skierList.sort(Comparator.comparing(Skier::getFinishTime));
 					LocalTime referenceTime = skierList.get(0).getFinishTime();
+															
 					for (Skier skiGuy : skierList) {
 						Duration delay = Duration.between(referenceTime, skiGuy.getFinishTime());
-						setStartTime((int) delay.getSeconds()); 
-						skiGuy.setDistance(0); // Reset race distance for each skier.
-						skiGuy.setFinishTime(LocalTime.of(00,00,00)); // Reset finish to zero for each skier.
-						skiGuy.setLastCheckPointTime(LocalTime.of(00, 00, 00));
+						int seconds = (int) delay.getSeconds();
+						skiGuy.getTimer().setFinishTime(null);
+						skiGuy.setFinished(false);
+						
+						LocalTime newStartTime = LocalTime.of(00, 00, 00).plusSeconds(seconds);
+						System.out.println(newStartTime.getSecond());
+						skiGuy.getTimer().setStartTime(newStartTime);
+						skiGuy.setDistance(0);
+						skiGuy.setFinishTime(LocalTime.of(00,00,00));
+						skiGuy.setLastCheckPointTime(LocalTime.of(00,00,00));
+						resultsTable.refresh();
 					}
+					
+					break;
 				}
 				else if (individuellStart.isSelected()) {
 					skier.setStartType("individuellStart");
@@ -281,6 +294,12 @@ public class Main extends Application {
 				skierList.get(i).getTimer().setStartTime(newStartTime);
 				resultsTable.refresh();
 			}
+		}
+	}
+	
+	public void setStartTimeMassTart() {
+		for (Skier skier : skierList) {
+			
 		}
 	}
 

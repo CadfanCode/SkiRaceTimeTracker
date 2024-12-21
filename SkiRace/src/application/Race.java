@@ -69,9 +69,6 @@ public class Race {
     public void startRace() {
         Thread thread = new Thread(() -> {
             for (Skier skier : getSkiers()) {
-        	    System.out.println(skier.getTimer().getStartTime());
-                /*skier.getTimer().setStartTime(localTime);
-                System.out.println(skier.getTimer().getStartTime());*/
                 skier.start();
             }
             simulateRace();
@@ -143,10 +140,6 @@ public class Race {
         }
     }
     
-    
-     // --
-     
-     // -- New code 13/12/2025 --
      // This method will convert the ArrayList from deserialization into an ObservableList that can be displayed in TableView.
     private ObservableList<Skier> conversionForTableView(ArrayList<SerializableSkier>  deserializedSkiers) {
 		for (SerializableSkier skier : deserializedSkiers) {
@@ -338,7 +331,10 @@ public class Race {
 		return null;
     }
     
-
+    public void resetRace() {
+    	leader = null;
+		setLocalTime(LocalTime.of(00, 00, 00));
+    }
     
     
 }
